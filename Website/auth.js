@@ -1,4 +1,7 @@
-
+function toast(text){
+    text = "<span>"+String(text)+"</span>";
+    M.toast({html: text});
+}
 //sign up
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (e) => {
@@ -6,7 +9,6 @@ signupForm.addEventListener('submit', (e) => {
     console.log("Prevented default");
     //get user info
     const f_name = signupForm['First_Name'].value;
-    console.log("First name");
     const l_name = signupForm['Last_Name'].value;
     const email = signupForm['inputEmail4'].value;
     const password = signupForm['inputPassword4'].value;
@@ -20,7 +22,12 @@ signupForm.addEventListener('submit', (e) => {
 
     //sign up the user
     //create User With Email And Password is an asynchronous task, so the then() method tells JS what to do afterward
-    auth.createUserWithEmailAndPassword(email, password).then(credential => {
+    auth.createUserWithEmailAndPassword(email, password)
+    .then(credential => {
         console.log(credential);
+        toast('Congrats! You have been signed up!');
     })
+    .catch((error) => {
+        toast(error + " Please use another email address.");
+    });
 })
