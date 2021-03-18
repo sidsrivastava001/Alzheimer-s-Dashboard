@@ -1,19 +1,9 @@
-var firebaseConfig = {
-    apiKey: "AIzaSyAJkaDmP2xrCFIHzufBhWqKcrRK6kvvtig",
-    authDomain: "tsa-software-group-2.firebaseapp.com",
-    databaseURL: "https://tsa-software-group-2-default-rtdb.firebaseio.com",
-    projectId: "tsa-software-group-2",
-    storageBucket: "tsa-software-group-2.appspot.com",
-    messagingSenderId: "1009383655239",
-    appId: "1:1009383655239:web:7706faf6dcce60f7ea2e62",
-    measurementId: "G-ZXHZ4YWP9V"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  firebase.analytics();
-
+  firebase.auth().onAuthStateChanged(function(user) {
+    window.user = user; // user is undefined if no user signed in
+   });
+  
 //variables
-
+var reg_f_name, reg_l_name, reg_email, reg_password, reg_address, reg_address2, reg_city, reg_state, reg_zip
 
 function dataPrepLogin() {
   var doctor_email = document.getElementById('inputEmail4');
@@ -34,16 +24,24 @@ function dataPrepPatient() {
 
 }
 function dataPrepRegister() {
-  var f_name = document.getElementById('First_Name');
-  var l_name = document.getElementById('Last_Name');
-  var email = document.getElementById('inputEmail4');
-  var password = document.getElementById('inputPassword4');
-  var address = document.getElementById('inputAddress');
-  var address2 = document.getElementById('inputAddress2');
-  var city = document.getElemementById('inputCity');
-  var state = document.getElementById('inputState');
-  var zip = document.getElementById('inputZip');
-  return f_name, l_name, email, password, address, address2, city, state, zip
+  reg_f_name = document.getElementById('First_Name');
+  toast('Got first name');
+  reg_l_name = document.getElementById('Last_Name');
+  toast('Got last name');
+  reg_email = document.getElementById('inputEmail4');
+  toast("Got email");
+  reg_password = document.getElementById('inputPassword4');
+  toast("Got password");
+  reg_address = document.getElementById('inputAddress');
+  toast("got address");
+  reg_address2 = document.getElementById('inputAddress2');
+  toast("got second address");
+  reg_city = document.getElementById('inputCity');
+  toast("got city");
+  reg_state = document.getElementById('inputState');
+  toast('got state');
+  reg_zip = document.getElementById('inputZip');
+  toast('got zip');
 }
 
 function toast(text){
@@ -63,19 +61,16 @@ document.getElementById("insert_appointment").onclick = function() {
 };
 
 //Function to register
-document.getElementById('register_btn').onclick = function() {
-  var f_name, l_name, email, password, address, address2, city, state, zip = dataPrepRegister();
+document.getElementById('register-btn').onclick = function() {
+  //dataPrepRegister();
+  var email = "esnielsen@ctemc.org";
+  var password = "something123";
   toast('Variables collected');
   firebase.auth().createUserWithEmailAndPassword(email, password)
-  .then((userCredential) => {
-    //Signed in
-    var user = userCredential.user;
-    //...
-  })
   .catch((error) => {
     var errorCode = error.code;
     var errorMessage = error.Message;
-  })
+  });
 
 }
 
