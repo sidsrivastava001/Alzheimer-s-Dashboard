@@ -28,6 +28,21 @@ signupForm.addEventListener('submit', (e) => {
         toast('Congrats! You have been signed up!');
     })
     .catch((error) => {
-        toast(error + " Please use another email address.");
+        console.log(error);
+        console.log(error.code);
+        console.log(error.message);
+        if (error.code == "auth/email-already-in-use") {
+            toast(error.message + " Please use another email address.");
+        }
+        else if (error.code == "auth/invalid-email") {
+            toast(error.message + " Please use a valid email");
+        }
+        else if (error.code == "auth/operation-not-allowed") {
+            toast(error.message + " Signing in with email and password not allowed. Contact site admin");
+        }
+        else if (error.code == "auth/weak-password") {
+            toast(error.message + " Password is not strong enough");
+        }
+
     });
 })
