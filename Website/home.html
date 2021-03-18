@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import bootstrap.css-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <!--Import materialize.css
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">-->
+
+    <style>
+        .sidebar {
+            padding: 15px 0 0;
+            box-shadow: inset -1px 0 0 rgb(0 0 0 / 10%);
+        }
+
+        .sidebar-sticky {
+            height: calc(100vh - 61px);
+            /* height: 100vh; */
+            overflow-y: auto;
+        }
+
+        .nav-link {
+            color: rgb(0 0 0 / 40%);
+        }
+
+        .dropdown {
+            padding-right: 10px;
+        }
+    </style>
+
+    <title>Alzheimer's Doctor Dashboard</title>
+</head>
+
+<body>
+
+    <!-- <nav class="navbar navbar-light" style="justify-content: flex-end; background-color: #e3f2fd;">
+            <div class="container">
+                <a class="navbar-brand" href="home.html">Home</a>
+            </div>
+            <ul class="nav justify-content-end">
+                <li class="nav-item">
+                    <a class="navbar-brand" href="home.html">Home</a>
+                </li>
+            </ul>
+        </nav> -->
+
+    <body>
+        <nav class="navbar navbar-light" style="justify-content: flex-end; background-color: #e3f2fd;">
+            <div class="container-fluid justify-content-end">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item dropdown">
+                        <a class="navbar-brand dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Your Name
+                        </a>
+                        <ul class="dropdown-menu col-12" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                    <div class="sidebar-sticky">
+                        <h6
+                            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mb-1 text-muted">
+                            <span>Patients</span>
+                        </h6>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    A, B
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    C, D
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    E, F
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    G, H
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+
+                <footer class="footer">
+
+                </footer>
+
+
+                <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+                <!--Firebase Libraries - Make sure the version matches your Firebase SDK snippet-->
+                <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
+                <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-auth.js"></script>
+                <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-database.js"></script>
+
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+                    crossorigin="anonymous"></script>
+                <script src='Materialize.js'></script>
+                <script src='firescripts.js'></script>
+
+    </body>
+
+</html>
