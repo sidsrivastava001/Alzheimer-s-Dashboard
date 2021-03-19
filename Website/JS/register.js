@@ -24,7 +24,7 @@ signupForm.addEventListener('submit', (e) => {
     //create User With Email And Password is an asynchronous task, so the then() method tells JS what to do afterward
     auth.createUserWithEmailAndPassword(email, password)
     .then(credential => {
-        console.log(credential);
+        console.log(credential.user);
         toast('Congrats! You have been signed up!');
     })
     .catch((error) => {
@@ -45,4 +45,14 @@ signupForm.addEventListener('submit', (e) => {
         }
 
     });
-})
+});
+
+//logout function
+const logout = document.querySelector('#logout-btn');
+logout.addEventListener('clicked', (e) => {
+    e.preventDefault();
+    auth.signOut().then(() => {
+        console.log("You've successfully signed out");
+        toast("You've successfully signed out");
+    });
+});
