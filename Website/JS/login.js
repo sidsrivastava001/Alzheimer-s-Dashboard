@@ -25,7 +25,7 @@ loginForm.addEventListener('submit', (e) => {
 
 //logout function
 const logout = document.querySelector('#logout-btn');
-logout.addEventListener('clicked', (e) => {
+logout.addEventListener('click', (e) => {
     e.preventDefault();
     auth.signOut();
 });
