@@ -6,7 +6,6 @@ function toast(text){
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log("Prevented default");
     //get user info
     const f_name = signupForm['First_Name'].value;
     const l_name = signupForm['Last_Name'].value;
@@ -51,8 +50,5 @@ signupForm.addEventListener('submit', (e) => {
 const logout = document.querySelector('#logout-btn');
 logout.addEventListener('clicked', (e) => {
     e.preventDefault();
-    auth.signOut().then(() => {
-        console.log("You've successfully signed out");
-        toast("You've successfully signed out");
-    });
+    auth.signOut();
 });
