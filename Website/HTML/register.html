@@ -30,7 +30,7 @@
         <br></br>
         <div class="container">
             <div class="jumbotron">
-                <h1>Alzheimer's Doctor Dashboard</h1>
+                <a href = "index.html"><h1>Alzheimer's Doctor Dashboard</h1></a>
                 <br></br>
                 <h4>Sign Up</h4>
               </div>
@@ -74,6 +74,10 @@
               <label for="inputZip" class="form-label">Zip</label>
               <input type="text" class="form-control" id="inputZip">
             </div>
+            <div class="col-md-6">
+              <label for="credentials" class="form-label">Credentials</label>
+              <textarea type="text" class="form-control" id="credentials"></textarea>
+            </div>
             <div class="col-12">
               <button class="btn btn-primary">Register</button>
             </div>
@@ -89,6 +93,7 @@
         <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-database.js"></script>
         <script>
           // Initialize Firebase
           var firebaseConfig = {

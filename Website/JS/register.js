@@ -2,6 +2,63 @@ function toast(text){
     text = "<span>"+String(text)+"</span>";
     M.toast({html: text});
 }
+function removePeriods(input) { // Removes periods from the inputs to avoid confusing firebase and replaces them with "_()"
+    //check if email contains periods
+    if (input.indexOf(".") > -1) {
+        //split email address at the periods
+        var length = input.split(".");
+        //variable to hold the final email address
+        var concatenating = '';
+        //iterate through the list of string fragments
+        for(var i = 0; i < length.length; i++) {
+            //build the string up using the string fragments and the proprietary character combination
+            if (i < length.length-1){
+                concatenating += length[i].valueOf() + "_()";
+            }
+            else {
+                //leave out the proprietary character combination after the last string fragment
+                concatenating += length[i].valueOf();    
+            }
+        }
+        //ensure that email2 is a string
+        email2 = concatenating.valueOf();
+    }
+    else {
+        email2 = input;
+    }
+    //return email2
+    return email2
+}
+function addPeriods(input) {    // Re-adds periods back in to the emails for correct representation
+    //check if email contains periods
+    input = String(input);
+    if (input.indexOf("_()") > -1) {
+        //split email address at the periods
+        var length = input.split("_()");
+        //variable to hold the final email address
+        var concatenating = '';
+        //iterate through the list of string fragments
+        for(var i = 0; i < length.length; i++) {
+            //build the string up using the string fragments and the proprietary character combination
+            if (i < length.length-1){
+                concatenating += length[i].valueOf() + ".";
+            }
+            else {
+                //on the last string, don't add the period to the end of it
+                concatenating += length[i].valueOf();    
+            }
+        }
+        //ensure that concatenating is a string and put it into the email2 variable
+        email2 = concatenating.valueOf();
+    }
+    //if the input string does not contain any "_()"
+    else {
+        //set email2 equal to the input
+        email2 = input;
+    }
+    //return email2 to the caller
+    return email2
+}
 //sign up
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (e) => {
@@ -9,16 +66,18 @@ signupForm.addEventListener('submit', (e) => {
     //get user info
     const f_name = signupForm['First_Name'].value;
     const l_name = signupForm['Last_Name'].value;
-    const email = signupForm['inputEmail4'].value;
+    var email = signupForm['inputEmail4'].value;
+    var email1 = removePeriods(email);
     const password = signupForm['inputPassword4'].value;
     const address = signupForm['inputAddress'].value;
     const address2 = signupForm['inputAddress2'].value;
     const city = signupForm['inputCity'].value;
     const state = signupForm['inputState'].value;
     const zip = signupForm['inputZip'].value;
+    const cred = signupForm['credentials'].value;
 
     console.log(email, password);
-
+    console.log("Email with periods removed: ", email1);
     //sign up the user
     //create User With Email And Password is an asynchronous task, so the then() method tells JS what to do afterward
     auth.createUserWithEmailAndPassword(email, password)
@@ -44,6 +103,36 @@ signupForm.addEventListener('submit', (e) => {
         }
 
     });
+
+    //Add user to the database Doctors folder
+    firebase.database().ref("Doctors/" + email1 + "/Doctor_Info").set({
+        First_Name: f_name,
+        Last_Name: l_name,
+        Password: password,
+        Email: email1,
+        Credentials: cred,
+        Address: address,
+        Address2: address2,
+        City: city,
+        State: state,
+        Zip_Code: zip
+    });
+    function clearInput(tag) {
+        document.querySelector("#" + tag).value = "";
+    }
+    function clearInputs() {
+        clearInput('First_Name');
+        clearInput("Last_Name");
+        clearInput("inputEmail4");
+        clearInput("inputPassword4");
+        clearInput("inputAddress");
+        clearInput('inputAddress2');
+        clearInput('inputCity');
+        clearInput("inputState");
+        clearInput('inputZip');
+        clearInput('credentials');
+    }
+    window.setTimeout(clearInputs, 5000);
 });
 
 //logout function
