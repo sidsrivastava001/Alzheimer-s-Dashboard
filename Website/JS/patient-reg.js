@@ -85,28 +85,36 @@ createPatientForm.addEventListener('submit', (e) => {
     const l_name = createPatientForm['Last_Name'].value;
     var email = createPatientForm['inputEmail4'].value;
     var email1 = removePeriods(email);
-    const password = createPatientForm['patient-password'].value;
-    const doc_email = createPatientForm['doc_email'].value;
-    const birthdate = createPatientForm['birthdate'].value;
+    const gender = createPatientForm['inputGender'].value;
+    const birthdate = createPatientForm['dob'].value;
+    const conditions = createPatientForm['conditions'].value;
 
     //getting the doctor currently logged in
     var user = auth.curentUser;
+    const doc_email = user.email;
+    const doc_email1 = removePeriods(doc_email);
     //if a user is logged in
-    if (user) {
+    if (user != null) {
         console.log(email, password);
     
         //Adding patient to the Patients folder
         firebase.database().ref("Patients/" + email1 + "/Info").set({
             First_Name: f_name,
             Last_Name: l_name,
-            Password: password,
             Email: email1,
-            Doc_Email: doc_email
+            Doc_Email: doc_email1,
+            Gender: gender,
+            Date_Of_Birth : birthdate,
+            PreexistingConditions : conditions
         });
-        toast("A new patient has been registered")
+        //Adding patient to the Patients folder within the currently logged in doctor
+        firebase.database().ref("Doctors/" + doc_email1 + "/Patients").set({
+            email1: f_name + " " + l_name
+        })
+        console.log("A new patient has been registered")
         window.setTimeout(clearInput(IDs), 2000);
     } else {
-        toast("You are not logged in as a verified doctor. Register or sign in to add a new patient");
+        console.log("You are not logged in as a verified doctor. Register or sign in to add a new patient");
     }
 
 });
