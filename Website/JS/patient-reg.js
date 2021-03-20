@@ -60,8 +60,25 @@ function addPeriods(input) {    // Re-adds periods back in to the emails for cor
     return email2
 }
 
+//listen for auth status changes
+auth.onAuthStateChanged(user => {
+    if (user) {
+        console.log("User logged in: ", user);
+    } else {
+        console.log("User logged out");
+    }
+
+})
+
 const createPatientForm = document.querySelector("#patient-register");
 createPatientForm.addEventListener('submit', (e) => {
+    
+    function clearInput(tags) {
+        for (var i = 0; i < tags.length; i++) {
+            document.querySelector('#' + tags[i]).value = '';
+        }
+    }
+    var IDs = ['First_Name', 'Last_Name', 'inputEmail4', 'patient-password', 'doc_email'];
     e.preventDefault();
     //get patient info from the form
     const f_name = createPatientForm['First_Name'].value;
@@ -70,6 +87,7 @@ createPatientForm.addEventListener('submit', (e) => {
     var email1 = removePeriods(email);
     const password = createPatientForm['patient-password'].value;
     const doc_email = createPatientForm['doc_email'].value;
+    const birthdate = createPatientForm['birthdate'].value;
 
     //getting the doctor currently logged in
     var user = auth.curentUser;
@@ -85,15 +103,10 @@ createPatientForm.addEventListener('submit', (e) => {
             Email: email1,
             Doc_Email: doc_email
         });
+        toast("A new patient has been registered")
+        window.setTimeout(clearInput(IDs), 2000);
     } else {
-        toast("You are not logged in as a verified doctor. Form rejected");
-        function clearInput(tags) {
-            for (var i = 0; i < tags.length; i++) {
-                document.querySelector('#' + tags[i]).value = '';
-            }
-        }
-        var IDs = ['First_Name', 'Last_Name', 'inputEmail4', 'patient-password', 'doc_email'];
-        window.setTimeout(clearInput(IDs), 5000);
+        toast("You are not logged in as a verified doctor. Register or sign in to add a new patient");
     }
 
 });

@@ -59,10 +59,29 @@ function addPeriods(input) {    // Re-adds periods back in to the emails for cor
     //return email2 to the caller
     return email2
 }
+
+//listen for auth status changes
+auth.onAuthStateChanged(user => {
+    if (user) {
+        console.log("User logged in: ", user);
+    } else {
+        console.log("User logged out");
+    }
+
+})
+
 //sign up
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    function clearInput(tags) {
+        for (var i = 0; i < tags.length; i++) {
+            document.querySelector('#' + tags[i]).value = '';
+        }
+    }
+    var IDs = ['patient-email', 'alz-test', 'doc-score', 'notes'];
+
     //get user info
     const f_name = signupForm['First_Name'].value;
     const l_name = signupForm['Last_Name'].value;
@@ -128,7 +147,7 @@ signupForm.addEventListener('submit', (e) => {
 
 //logout function
 const logout = document.querySelector('#logout-btn');
-logout.addEventListener('clicked', (e) => {
+logout.addEventListener('click', (e) => {
     e.preventDefault();
     auth.signOut();
 });

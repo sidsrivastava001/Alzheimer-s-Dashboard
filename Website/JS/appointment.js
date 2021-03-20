@@ -60,9 +60,27 @@ function addPeriods(input) {    // Re-adds periods back in to the emails for cor
     return email2
 }
 
+//listen for auth status changes
+auth.onAuthStateChanged(user => {
+    if (user) {
+        console.log("User logged in: ", user);
+    } else {
+        console.log("User logged out");
+    }
+
+})
+
 const appointmentForm = document.querySelector('#new-appointment');
 appointmentForm.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    function clearInput(tags) {
+        for (var i = 0; i < tags.length; i++) {
+            document.querySelector('#' + tags[i]).value = '';
+        }
+    }
+    var IDs = ['patient-email', 'alz-test', 'doc-score', 'notes'];
+
     //getting the date for indexing the titles of the appointments
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -74,31 +92,47 @@ appointmentForm.addEventListener('submit', (e) => {
     //Getting the currently signed in user (a doctor)
     var user = auth.currentUser;
     console.log(user);
-    //getting their email
-    var user_email = user.email;
-    var user_email1 = removePeriods(user_email);
-    const patient_email1 = removePeriods(appointmentForm['patient-email'].value);
-    const bucketName = "";
-    const AlzTestScore = appointmentForm['alz-test'].value;
-    const MLScore = "";
-    const DocScore = appointmentForm['doc-score'].value;
-    const notes = appointmentForm['notes'].value;
-    const confirmed = "False";
+    if (user) {
+        //getting their email
+        var user_email = user.email;
+        var user_email1 = removePeriods(user_email);
+        const patient_email1 = removePeriods(appointmentForm['patient-email'].value);
+        const bucketName = "";
+        const AlzTestScore = appointmentForm['alz-test'].value;
+        const MLScore = "";
+        const DocScore = appointmentForm['doc-score'].value;
+        const notes = appointmentForm['notes'].value;
+        const confirmed = "False";
 
-    //Checking if the doctor has a patient with the email that he put in
-    //getting the snapshot of the patients folder
-    firebase.database().ref('Doctors/' + doctor_email_patient1 + '/Patients').on('value', function(snapshot) {
-        console.log(snapshot.val());
-    })
+        var exists = false;
+        //Checking if the doctor has a patient with the email that he put in
+        //getting the snapshot of the patients folder
+        firebase.database().ref('Doctors/' + user_email1 + '/Patients').on('value', function(snapshot) {
+            const data = snapshot.val();
+            var i;
+            for (i in data) {
+                if (i == patient_email1) {
+                    exists = true;
+                }
+            }
+        });
 
-
-    /* firebase.database().ref("Doctors/" + user_email1 + "/Appointments/" + today).set({
-        Patient_Email = patient_email1,
-        Bucket_Name : bucketName,
-        AlzheimersTestScore : AlzTestScore,
-        MLSuggestedScore : MLScore,
-        DoctorSuggestedScore : DocScore,
-        Notes: notes,
-        Confirmed: confirmed
-    }); */
-})
+        if (exists){
+            firebase.database().ref("Doctors/" + user_email1 + "/Appointments/" + today).set({
+                Patient_Email = patient_email1,
+                Bucket_Name : bucketName,
+                AlzheimersTestScore : AlzTestScore,
+                MLSuggestedScore : MLScore,
+                DoctorSuggestedScore : DocScore,
+                Notes: notes,
+                Confirmed: confirmed
+            });
+            window.setTimeout(clearInput(IDs), 2000);
+        } else {
+            console.log('Patient does not exist')
+        }
+    } else {
+        console.log("Doctor not logged in");
+        toast("Please log in as a doctor to add a patient to your profile");
+    }
+});
