@@ -117,22 +117,13 @@ signupForm.addEventListener('submit', (e) => {
         State: state,
         Zip_Code: zip
     });
-    function clearInput(tag) {
-        document.querySelector("#" + tag).value = "";
+    function clearInput(tags) {
+        for (var i = 0; i < tags.length; i++) {
+            document.querySelector('#' + tags[i]).value = '';
+        }
     }
-    function clearInputs() {
-        clearInput('First_Name');
-        clearInput("Last_Name");
-        clearInput("inputEmail4");
-        clearInput("inputPassword4");
-        clearInput("inputAddress");
-        clearInput('inputAddress2');
-        clearInput('inputCity');
-        clearInput("inputState");
-        clearInput('inputZip');
-        clearInput('credentials');
-    }
-    window.setTimeout(clearInputs, 5000);
+    var IDs = ['First_Name', 'Last_Name', 'inputEmail4', 'inputPassword4', 'inputAddress', 'inputAddress2', 'inputCity', 'inputState', 'inputZip', 'credentials'];
+    window.setTimeout(clearInput(IDs), 5000);
 });
 
 //logout function
