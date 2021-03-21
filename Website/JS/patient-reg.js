@@ -14,10 +14,7 @@ const db = firebase.firestore();
 db.settings({ timestampsInSnapshots: true });
 
 var CurrentUser;
-const errorToast = [].slice.call(document.querySelectorAll('.error-toast'));
-/* var toastList = toastElList.map(function (toastEl) {
-    return new bootstrap.Toast(toastEl, option)
-}); */
+
 
 function toast(text){
     text = "<span>"+String(text)+"</span>";
@@ -98,10 +95,10 @@ createPatientForm.addEventListener('submit', (e) => {
     
     function clearInput(tags) {
         for (var i = 0; i < tags.length; i++) {
-            document.querySelector('#' + tags[i]).value = '';
+            document.querySelector('#' + tags[i]).value = "";
         }
     }
-    var IDs = ['First_Name', 'Last_Name', 'inputEmail4', 'patient-password', 'doc_email'];
+    var IDs = ['First_Name', 'Last_Name', 'inputEmail4', 'inputGender', 'dob', 'conditions'];
     e.preventDefault();
     //get patient info from the form
     const f_name = createPatientForm['First_Name'].value;
@@ -117,7 +114,7 @@ createPatientForm.addEventListener('submit', (e) => {
     
     //if a user is logged in
     if (CurrentUser != null) {
-        console.log(email, password);
+        console.log(email);
         
         const doc_email = CurrentUser.email;
         const doc_email1 = removePeriods(doc_email);
@@ -129,17 +126,18 @@ createPatientForm.addEventListener('submit', (e) => {
             Doc_Email: doc_email1,
             Gender: gender,
             Date_Of_Birth : birthdate,
-            PreexistingConditions : conditions
+            PreExistingConditions : conditions
         });
         //Adding patient to the Patients folder within the currently logged in doctor
         firebase.database().ref("Doctors/" + doc_email1 + "/Patients").set({
             email1: f_name + " " + l_name
         })
         console.log("A new patient has been registered")
+        toast("A new patient has been registered");
         window.setTimeout(clearInput(IDs), 2000);
     } else {
         console.log("You are not logged in as a verified doctor. Register or sign in to add a new patient");
-        //toast('You are not logged in as a verified doctor. Register or sign in to add a new patient');
+        toast('You are not logged in as a verified doctor. Register or sign in to add a new patient');
         errorToast.show();
     }
 

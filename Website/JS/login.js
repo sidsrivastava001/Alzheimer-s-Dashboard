@@ -3,12 +3,16 @@ function toast(text){
     M.toast({html: text});
 }
 
+var currentUser = auth.currentUser;
+
 //listen for auth status changes
 auth.onAuthStateChanged(user => {
     if (user) {
         console.log("User logged in: ", user);
+        currentUser = user;
     } else {
         console.log("User logged out");
+        currentUser = user;
     }
 
 })
