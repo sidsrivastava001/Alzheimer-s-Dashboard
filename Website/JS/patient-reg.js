@@ -1,3 +1,24 @@
+var firebaseConfig = {
+    apiKey: "AIzaSyAJkaDmP2xrCFIHzufBhWqKcrRK6kvvtig",
+    authDomain: "tsa-software-group-2.firebaseapp.com",
+    databaseURL: "https://tsa-software-group-2-default-rtdb.firebaseio.com",
+    projectId: "tsa-software-group-2",
+    storageBucket: "tsa-software-group-2.appspot.com",
+    messagingSenderId: "1009383655239",
+    appId: "1:1009383655239:web:7706faf6dcce60f7ea2e62",
+    measurementId: "G-ZXHZ4YWP9V"
+};
+firebase.initializeApp(firebaseConfig);
+// make auth and firestore references
+const db = firebase.firestore();
+db.settings({ timestampsInSnapshots: true });
+
+var CurrentUser;
+const errorToast = [].slice.call(document.querySelectorAll('.error-toast'));
+/* var toastList = toastElList.map(function (toastEl) {
+    return new bootstrap.Toast(toastEl, option)
+}); */
+
 function toast(text){
     text = "<span>"+String(text)+"</span>";
     M.toast({html: text});
@@ -61,11 +82,13 @@ function addPeriods(input) {    // Re-adds periods back in to the emails for cor
 }
 
 //listen for auth status changes
-auth.onAuthStateChanged(user => {
+firebase.auth().onAuthStateChanged(user => {
     if (user) {
-        console.log("User logged in: ", user);
+        console.log("User logged in: ", user.email);
+        CurrentUser = user;
     } else {
         console.log("User logged out");
+        CurrentUser = user;
     }
 
 })
@@ -90,13 +113,14 @@ createPatientForm.addEventListener('submit', (e) => {
     const conditions = createPatientForm['conditions'].value;
 
     //getting the doctor currently logged in
-    var user = auth.curentUser;
-    const doc_email = user.email;
-    const doc_email1 = removePeriods(doc_email);
-    //if a user is logged in
-    if (user != null) {
-        console.log(email, password);
+    console.log(CurrentUser);
     
+    //if a user is logged in
+    if (CurrentUser != null) {
+        console.log(email, password);
+        
+        const doc_email = CurrentUser.email;
+        const doc_email1 = removePeriods(doc_email);
         //Adding patient to the Patients folder
         firebase.database().ref("Patients/" + email1 + "/Info").set({
             First_Name: f_name,
@@ -115,6 +139,15 @@ createPatientForm.addEventListener('submit', (e) => {
         window.setTimeout(clearInput(IDs), 2000);
     } else {
         console.log("You are not logged in as a verified doctor. Register or sign in to add a new patient");
+        //toast('You are not logged in as a verified doctor. Register or sign in to add a new patient');
+        errorToast.show();
     }
 
+});
+
+//logout function
+const logout = document.querySelector('#logout');
+logout.addEventListener('click', (e) => {
+    e.preventDefault();
+    firebase.auth().signOut();
 });

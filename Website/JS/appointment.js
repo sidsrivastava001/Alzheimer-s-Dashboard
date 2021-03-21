@@ -90,7 +90,7 @@ appointmentForm.addEventListener('submit', (e) => {
     console.log(today);
 
     //Getting the currently signed in user (a doctor)
-    var user = auth.currentUser;
+    var user = firebase.auth().currentUser;
     console.log(user);
     if (user) {
         //getting their email

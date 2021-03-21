@@ -62,7 +62,7 @@
                     <a href="#">About</a>
                 </li>
                 <li>
-                    <a href="#">Logout</a>
+                    <a href="#" id = "logout">Logout</a>
                 </li>
             </ul>
 
@@ -116,7 +116,17 @@
               <button class="btn btn-primary">Add Patient</button>
             </div>
           </form>
+          <div class="toast" data-autohide = 'false'>
+                <div class="toast-header">
+                    Submission Error
+                </div>
+                <div class="toast-body">
+                You must sign in to add a patient
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
         </div>
+        
     </div>
 
     <!-- jQuery CDN - Slim version (=without AJAX) -->
@@ -148,7 +158,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-database.js"></script>
-    <script>
+    <!-- <script>
         // Initialize Firebase
         var firebaseConfig = {
           apiKey: "AIzaSyAJkaDmP2xrCFIHzufBhWqKcrRK6kvvtig",
@@ -168,8 +178,9 @@
 
       // update firestore settings
         db.settings({ timestampsInSnapshots: true });
-      </script>
+      </script> -->
       <script src="../JS/patient-reg.js"></script>
+      <script src = "../JS/patient-scripts.js"></script>
 </body>
 
 </html>
