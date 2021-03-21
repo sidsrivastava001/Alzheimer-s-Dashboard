@@ -133,12 +133,11 @@ createPatientForm.addEventListener('submit', (e) => {
             email1: f_name + " " + l_name
         })
         console.log("A new patient has been registered")
-        toast("A new patient has been registered");
+        alert("A new patient has been registered");
         window.setTimeout(clearInput(IDs), 2000);
     } else {
         console.log("You are not logged in as a verified doctor. Register or sign in to add a new patient");
-        toast('You are not logged in as a verified doctor. Register or sign in to add a new patient');
-        errorToast.show();
+        alert('You are not logged in as a verified doctor. Register or sign in to add a new patient');
     }
 
 });
