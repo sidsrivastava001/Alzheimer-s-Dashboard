@@ -161,6 +161,21 @@ a.article:hover {
 #content.active {
     width: 100%;
 }
+a.link-sect-box{
+    text-decoration: none;
+}
+div.link-sect {
+    background-color: rgba(240, 248, 255, 0.95);
+    color: black;
+    padding: 10px;
+    border-radius: 1vh;
+    margin: 1vh;
+    transition: transform .2s;
+}
+
+div.link-sect:hover {
+    transform: scale(1.0);
+}
 
 /* ---------------------------------------------------
     MEDIAQUERIES
