@@ -16,6 +16,7 @@ db.settings({ timestampsInSnapshots: true });
 var CurrentUser;
 
 
+
 function toast(text){
     text = "<span>"+String(text)+"</span>";
     M.toast({html: text});
@@ -130,7 +131,7 @@ createPatientForm.addEventListener('submit', (e) => {
         });
         //Adding patient to the Patients folder within the currently logged in doctor
         firebase.database().ref("Doctors/" + doc_email1 + "/Patients").set({
-            email1: f_name + " " + l_name
+            email1: email1
         })
         console.log("A new patient has been registered")
         alert("A new patient has been registered");
