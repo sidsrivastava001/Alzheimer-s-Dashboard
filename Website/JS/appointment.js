@@ -79,7 +79,7 @@ appointmentForm.addEventListener('submit', (e) => {
             document.querySelector('#' + tags[i]).value = '';
         }
     }
-    var IDs = ['patient-email', 'alz-test', 'doc-score', 'notes'];
+    var IDs = ['inputEmail4', 'appointment_time', 'dob', 'Reason'];
 
     //getting the date for indexing the titles of the appointments
     var today = new Date();
@@ -98,11 +98,37 @@ appointmentForm.addEventListener('submit', (e) => {
         var user_email1 = removePeriods(user_email);
         const patient_email1 = removePeriods(appointmentForm['patient-email'].value);
         const bucketName = "";
-        const AlzTestScore = appointmentForm['alz-test'].value;
+        const AlzTestScore = "";
         const MLScore = "";
-        const DocScore = appointmentForm['doc-score'].value;
-        const notes = appointmentForm['notes'].value;
+        const DocScore = "";
+        const notes = "";
         const confirmed = "False";
+        const MF = firebase.database().ref("Patients/" + patient_email1 + "/Info/Gender");      //database
+        console.log(MF);
+        var Age = "";     //database
+        var dob = firebase.database().ref("Patients/" + patient_email1 + "/Info/Date_Of_Birth");
+        console.log(dob);
+        var date_elements = dob.split("-");
+        var year = date_elements[0];
+        var month = date_elements[1];
+        var day = date_elements[2];
+
+        dob = new Date(month + "/" + day + "/" + year);
+        var month_diff = Date.now() - dob;
+        var age_df = new Date(month_diff);
+        var years = age_df.getUTCFullYear();
+        Age = Math.abs(years - 1970);
+        console.log("The patient is: ", years)
+
+        const SES = "";     //Doctor input
+        const MMSE = "";    //Doctor input
+        const eTIV = "";    //doctor input
+        const nWBV = "";    //doctor input
+        const ASF = "";     //doctor input
+        const reaction_time = "";       //empty as default
+        const math_score = "";          //empty as default
+        const math_time = "";           //empty as default
+        const mood = "";                //empty as default
 
         var exists = false;
         //Checking if the doctor has a patient with the email that he put in
@@ -119,13 +145,14 @@ appointmentForm.addEventListener('submit', (e) => {
 
         if (exists){
             firebase.database().ref("Doctors/" + user_email1 + "/Appointments/" + today).set({
-                Patient_Email = patient_email1,
+                Patient_Email : patient_email1,
                 Bucket_Name : bucketName,
                 AlzheimersTestScore : AlzTestScore,
                 MLSuggestedScore : MLScore,
                 DoctorSuggestedScore : DocScore,
                 Notes: notes,
-                Confirmed: confirmed
+                Confirmed: confirmed, 
+                
             });
             window.setTimeout(clearInput(IDs), 2000);
         } else {
