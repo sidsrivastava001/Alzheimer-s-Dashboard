@@ -120,6 +120,15 @@ createPatientForm.addEventListener('submit', (e) => {
         const doc_email = CurrentUser.email;
         const doc_email1 = removePeriods(doc_email);
         //Adding patient to the Patients folder
+        /* var patient_exists = false;
+        firebase.database().ref('Patients').on('value', function(snapshot) {
+            const data = snapshot.val();
+            for(i in data){
+                if (i == email1) {
+                    patient_exists = true;
+                }
+            }
+        }) */
         firebase.database().ref("Patients/" + email1 + "/Info").set({
             First_Name: f_name,
             Last_Name: l_name,
@@ -132,10 +141,11 @@ createPatientForm.addEventListener('submit', (e) => {
         //Adding patient to the Patients folder within the currently logged in doctor
         firebase.database().ref("Doctors/" + doc_email1 + "/Patients").set({
             email1: email1
-        })
+        });
         console.log("A new patient has been registered")
         alert("A new patient has been registered");
         window.setTimeout(clearInput(IDs), 2000);
+        
     } else {
         console.log("You are not logged in as a verified doctor. Register or sign in to add a new patient");
         alert('You are not logged in as a verified doctor. Register or sign in to add a new patient');

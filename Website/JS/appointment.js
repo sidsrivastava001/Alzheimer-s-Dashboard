@@ -1,3 +1,18 @@
+var firebaseConfig = {
+    apiKey: "AIzaSyAJkaDmP2xrCFIHzufBhWqKcrRK6kvvtig",
+    authDomain: "tsa-software-group-2.firebaseapp.com",
+    databaseURL: "https://tsa-software-group-2-default-rtdb.firebaseio.com",
+    projectId: "tsa-software-group-2",
+    storageBucket: "tsa-software-group-2.appspot.com",
+    messagingSenderId: "1009383655239",
+    appId: "1:1009383655239:web:7706faf6dcce60f7ea2e62",
+    measurementId: "G-ZXHZ4YWP9V"
+};
+firebase.initializeApp(firebaseConfig);
+// make auth and firestore references
+const db = firebase.firestore();
+db.settings({ timestampsInSnapshots: true });
+
 function toast(text){
     text = "<span>"+String(text)+"</span>";
     M.toast({html: text});
@@ -59,16 +74,88 @@ function addPeriods(input) {    // Re-adds periods back in to the emails for cor
     //return email2 to the caller
     return email2
 }
+var currentUser = firebase.auth().currentUser;
+console.log("The current user is: ", currentUser);
+
+function populateDropdown() {
+    //email with periods removed of the current doctor
+    if (currentUser != null && currentUser != undefined){
+        console.log("Starting to populate HTML");
+        var email1 = removePeriods(currentUser.email);
+        //var email1 = 'esnielsen@ctemc_()org';
+        //list of the emails of the doctor's patients
+        var patientEmails = [];
+        //List of names of the doctor's patients
+        var patientNames = [];
+
+        var emailsPopulated = false;
+        var namesPopulated = false;
+        //Iterate through the patients of the doctor and add their emails to the patientEmails list
+        firebase.database().ref("Doctors/" + email1 + "/Patients").on('value', function(snapshot) {
+            const data = snapshot.val();
+            for (i in data) {
+                patientEmails.push(data[i]);
+                patientEmailsCounter += 1;
+                console.log("Patient Emails: ", patientEmails);
+            }
+        });
+        
+        //Iterate through both the patient emails list and the list of patients in the Patients folder, adding the matching emails ['First_Name'] and ['Last_Name'] properties
+        firebase.database().ref("Patients").on('value', function(snapshot) {
+            const data = snapshot.val();
+            for (email in patientEmails) {
+                for (i in data) {
+                    if (patientEmails[email] == data[i].Info.Email) {
+                        patientNames.push((data[i].Info.First_Name + " " + data[i].Info.Last_Name));
+                        patientNamesCounter += 1;
+                        console.log(patientNames);
+                    }
+                }
+            }
+        });
+        console.log("Patient Names", patientNames);
+        console.log("First element in the array: ", patientNames[0]);
+        /* let a = new Array(); */
+        for (var n = 0; n <= patientNamesCounter; n++) {
+            console.log(patientNames[n]);
+        }
+        //Get the page submenu
+        console.log("Finished iterating")
+        var pageSubmenu = document.getElementById('pageSubmenu');
+        var list_item = document.createElement('LI');
+        var anchor = document.createElement('A');
+        anchor.href = "patient-info.html";
+        anchor.innerHTML = String(patientNames[0]);
+        anchor.innerText = String(patientNames[0]);
+        //anchor.outerText = String(patientNames[0]);
+        anchor.text = String(patientNames[0]);
+        anchor.textContent = String(patientNames[0]);
+        list_item.appendChild(anchor);
+        pageSubmenu.appendChild(list_item);
+
+    } else {
+        console.log('User object is undefined or null');
+    }
+}
+
+/* window.onload = function() {
+    populateDropdown();
+}; */
 
 //listen for auth status changes
-auth.onAuthStateChanged(user => {
+firebase.auth().onAuthStateChanged(user => {
     if (user) {
         console.log("User logged in: ", user);
+        currentUser = user;
+        populateDropdown();
     } else {
         console.log("User logged out");
+        currentUser = user;
     }
 
-})
+});
+
+
 
 const appointmentForm = document.querySelector('#new-appointment');
 appointmentForm.addEventListener('submit', (e) => {
