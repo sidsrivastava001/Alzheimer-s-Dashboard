@@ -8,19 +8,20 @@
     appId: "1:1009383655239:web:7706faf6dcce60f7ea2e62",
     measurementId: "G-ZXHZ4YWP9V"
 };
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig); */
 // make auth and firestore references
-const db = firebase.firestore();
+/* const db = firebase.firestore();
 db.settings({ timestampsInSnapshots: true }); */
 
-var CurrentUser;
+var currentUser = firebase.auth().currentUser;
+console.log("The current user is: ", currentUser);
 
 
 
-function toast(text){
+/* function toast(text){
     text = "<span>"+String(text)+"</span>";
     M.toast({html: text});
-}
+} */
 function removePeriods(input) { // Removes periods from the inputs to avoid confusing firebase and replaces them with "_()"
     //check if email contains periods
     if (input.indexOf(".") > -1) {
@@ -79,14 +80,74 @@ function addPeriods(input) {    // Re-adds periods back in to the emails for cor
     return email2
 }
 
+function populateDropdown() {
+    //email with periods removed of the current doctor
+    if (currentUser != null && currentUser != undefined){
+        console.log("Starting to populate HTML");
+        var email1 = removePeriods(currentUser.email);
+        //var email1 = 'esnielsen@ctemc_()org';
+        //list of the emails of the doctor's patients
+        var patientEmails = [];
+        //List of names of the doctor's patients
+        var patientNames = [];
+
+        var emailsPopulated = false;
+        var namesPopulated = false;
+        //Iterate through the patients of the doctor and add their emails to the patientEmails list
+        firebase.database().ref("Doctors/" + email1 + "/Patients").on('value', function(snapshot) {
+            const data = snapshot.val();
+            for (i in data) {
+                patientEmails.push(data[i]);
+                
+                
+            }
+            console.log("Patient Emails: ", patientEmails);
+            emailsPopulated = true;
+        });
+        
+        //Iterate through both the patient emails list and the list of patients in the Patients folder, adding the matching emails ['First_Name'] and ['Last_Name'] properties
+        firebase.database().ref("Patients").on('value', function(snapshot) {
+            const data = snapshot.val();
+            for (email in patientEmails) {
+                for (i in data) {
+                    if (patientEmails[email].Email == data[i].Info.Email) {
+                        patientNames.push((data[i].Info.First_Name + " " + data[i].Info.Last_Name));
+                        
+                        
+                    }
+                }
+            }
+            console.log("Patient Names: ", patientNames);
+            namesPopulated = true;
+            if (emailsPopulated) {
+                var pageSubmenu = document.getElementById("pageSubmenu");
+                for (var n = 0; n < patientNames.length; n++) {
+                    var pageSubmenu = document.getElementById("pageSubmenu");
+                    var list_item = document.createElement('LI');
+                    var anchor_string = "<a href = 'patientdata.html'>" + patientNames[n] + "</a>";
+                    //var anchor = document.createElement("A");
+                    list_item.innerHTML = anchor_string;
+                    pageSubmenu.appendChild(list_item);
+                }
+            }
+
+        });
+
+    } else {
+        console.log('User object is undefined or null');
+    }
+}
+
+
 //listen for auth status changes
 firebase.auth().onAuthStateChanged(user => {
     if (user) {
         console.log("User logged in: ", user);
-        CurrentUser = user;
+        currentUser = user;
+        populateDropdown();
     } else {
         console.log("User logged out");
-        CurrentUser = user;
+        currentUser = user;
     }
 
 })
@@ -111,13 +172,13 @@ createPatientForm.addEventListener('submit', (e) => {
     const conditions = createPatientForm['conditions'].value;
 
     //getting the doctor currently logged in
-    console.log(CurrentUser);
+    console.log(currentUser);
     
     //if a user is logged in
-    if (CurrentUser != null) {
+    if (currentUser != null) {
         console.log(email1);
         
-        const doc_email = CurrentUser.email;
+        const doc_email = currentUser.email;
         const doc_email1 = removePeriods(doc_email);
         console.log(doc_email1);
         firebase.database().ref("Patients/" + email1 + "/Info").set({
