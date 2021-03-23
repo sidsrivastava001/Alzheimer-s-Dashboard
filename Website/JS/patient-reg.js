@@ -1,4 +1,4 @@
-var firebaseConfig = {
+/* var firebaseConfig = {
     apiKey: "AIzaSyAJkaDmP2xrCFIHzufBhWqKcrRK6kvvtig",
     authDomain: "tsa-software-group-2.firebaseapp.com",
     databaseURL: "https://tsa-software-group-2-default-rtdb.firebaseio.com",
@@ -11,7 +11,7 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 // make auth and firestore references
 const db = firebase.firestore();
-db.settings({ timestampsInSnapshots: true });
+db.settings({ timestampsInSnapshots: true }); */
 
 var CurrentUser;
 
@@ -82,7 +82,7 @@ function addPeriods(input) {    // Re-adds periods back in to the emails for cor
 //listen for auth status changes
 firebase.auth().onAuthStateChanged(user => {
     if (user) {
-        console.log("User logged in: ", user.email);
+        console.log("User logged in: ", user);
         CurrentUser = user;
     } else {
         console.log("User logged out");
@@ -115,20 +115,11 @@ createPatientForm.addEventListener('submit', (e) => {
     
     //if a user is logged in
     if (CurrentUser != null) {
-        console.log(email);
+        console.log(email1);
         
         const doc_email = CurrentUser.email;
         const doc_email1 = removePeriods(doc_email);
-        //Adding patient to the Patients folder
-        /* var patient_exists = false;
-        firebase.database().ref('Patients').on('value', function(snapshot) {
-            const data = snapshot.val();
-            for(i in data){
-                if (i == email1) {
-                    patient_exists = true;
-                }
-            }
-        }) */
+        console.log(doc_email1);
         firebase.database().ref("Patients/" + email1 + "/Info").set({
             First_Name: f_name,
             Last_Name: l_name,
@@ -139,12 +130,12 @@ createPatientForm.addEventListener('submit', (e) => {
             PreExistingConditions : conditions
         });
         //Adding patient to the Patients folder within the currently logged in doctor
-        firebase.database().ref("Doctors/" + doc_email1 + "/Patients").set({
-            email1: email1
+        firebase.database().ref("Doctors/" + doc_email1 + "/Patients/" + email1).set({
+            Email: email1
         });
         console.log("A new patient has been registered")
         alert("A new patient has been registered");
-        window.setTimeout(clearInput(IDs), 2000);
+        window.setTimeout(clearInput(IDs), 1000);
         
     } else {
         console.log("You are not logged in as a verified doctor. Register or sign in to add a new patient");

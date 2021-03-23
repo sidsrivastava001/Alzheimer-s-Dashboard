@@ -95,9 +95,11 @@ function populateDropdown() {
             const data = snapshot.val();
             for (i in data) {
                 patientEmails.push(data[i]);
-                patientEmailsCounter += 1;
-                console.log("Patient Emails: ", patientEmails);
+                
+                
             }
+            console.log("Patient Emails: ", patientEmails);
+            emailsPopulated = true;
         });
         
         //Iterate through both the patient emails list and the list of patients in the Patients folder, adding the matching emails ['First_Name'] and ['Last_Name'] properties
@@ -105,42 +107,33 @@ function populateDropdown() {
             const data = snapshot.val();
             for (email in patientEmails) {
                 for (i in data) {
-                    if (patientEmails[email] == data[i].Info.Email) {
+                    if (patientEmails[email].Email == data[i].Info.Email) {
                         patientNames.push((data[i].Info.First_Name + " " + data[i].Info.Last_Name));
-                        patientNamesCounter += 1;
-                        console.log(patientNames);
+                        
+                        
                     }
                 }
             }
+            console.log("Patient Names: ", patientNames);
+            namesPopulated = true;
+            if (emailsPopulated) {
+                var pageSubmenu = document.getElementById("pageSubmenu");
+                for (var n = 0; n < patientNames.length; n++) {
+                    var pageSubmenu = document.getElementById("pageSubmenu");
+                    var list_item = document.createElement('LI');
+                    var anchor_string = "<a href = 'patientEmails.html'>" + patientNames[n] + "</a>";
+                    //var anchor = document.createElement("A");
+                    list_item.innerHTML = anchor_string;
+                    pageSubmenu.appendChild(list_item);
+                }
+            }
+
         });
-        console.log("Patient Names", patientNames);
-        console.log("First element in the array: ", patientNames[0]);
-        /* let a = new Array(); */
-        for (var n = 0; n <= patientNamesCounter; n++) {
-            console.log(patientNames[n]);
-        }
-        //Get the page submenu
-        console.log("Finished iterating")
-        var pageSubmenu = document.getElementById('pageSubmenu');
-        var list_item = document.createElement('LI');
-        var anchor = document.createElement('A');
-        anchor.href = "patient-info.html";
-        anchor.innerHTML = String(patientNames[0]);
-        anchor.innerText = String(patientNames[0]);
-        //anchor.outerText = String(patientNames[0]);
-        anchor.text = String(patientNames[0]);
-        anchor.textContent = String(patientNames[0]);
-        list_item.appendChild(anchor);
-        pageSubmenu.appendChild(list_item);
 
     } else {
         console.log('User object is undefined or null');
     }
 }
-
-/* window.onload = function() {
-    populateDropdown();
-}; */
 
 //listen for auth status changes
 firebase.auth().onAuthStateChanged(user => {
