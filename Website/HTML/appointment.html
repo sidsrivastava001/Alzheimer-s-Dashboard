@@ -101,6 +101,35 @@
               <label for="Reason" class="form-label">Reason For Appointment</label>
               <textarea type="text" class="form-control" id="Reason"></textarea>
             </div>
+            <div class="col-md-2">
+                <label for="SES" class="form-label">SES</label>
+                <input type="text" class="form-control" id="SES">
+              </div>
+              <div class="col-md-2">
+                <label for="MMSE" class="form-label">MMSE</label>
+                <input type="text" class="form-control" id="MMSE">
+              </div>
+              <div class="col-md-2">
+                <label for="eTIV" class="form-label">eTIV</label>
+                <input type="text" class="form-control" id="eTIV">
+              </div>
+
+              <div class="col-md-6">
+                <label for="notes" class="form-label">Notes</label>
+                <textarea type="text" class="form-control" id="notes"></textarea>
+              </div>
+              <div class="col-md-2">
+                <label for="nWBV" class="form-label">nWBV</label>
+                <input type="text" class="form-control" id="nWBV">
+              </div>
+              <div class="col-md-2">
+                <label for="ASF" class="form-label">ASF</label>
+                <input type="text" class="form-control" id="ASF">
+              </div>
+              <div class="col-md-2">
+                <label for="doc_score" class="form-label">Doctor Score</label>
+                <input type="text" class="form-control" id="doc_score">
+              </div>
             <div class="col-12">
               <button class="btn btn-primary">Create Appointment</button>
             </div>
@@ -130,6 +159,11 @@
             });
         });
     </script>
+    <!--Firebase Libraries - Make sure the version matches your Firebase SDK snippet-->
+    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-database.js"></script>
     <!--Firebase stuff-->
     <script>
         // Initialize Firebase
@@ -152,11 +186,7 @@
       // update firestore settings
         db.settings({ timestampsInSnapshots: true });
     </script>
-    <!--Firebase Libraries - Make sure the version matches your Firebase SDK snippet-->
-    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-database.js"></script>
+    
     <script src="../JS/appointment.js"></script>
     <script src="../JS/populateDropdown.js"></script>
     <script src="../JS/setPatient.js"></script>

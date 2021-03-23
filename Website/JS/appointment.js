@@ -77,6 +77,16 @@ function addPeriods(input) {    // Re-adds periods back in to the emails for cor
 var currentUser = firebase.auth().currentUser;
 console.log("The current user is: ", currentUser);
 
+function getAge(dateString) {
+    var today = new Date();
+    var birthdate = new Date(dateString)
+    var age = today.getFullYear() - birthdate.getFullYear();
+    var m = today.getMonth() - birthdate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
+        age--;
+    }
+    return age;
+}
 
 //listen for auth status changes
 firebase.auth().onAuthStateChanged(user => {
@@ -103,50 +113,54 @@ appointmentForm.addEventListener('submit', (e) => {
     }
     var IDs = ['inputEmail4', 'appointment_time', 'dob', 'Reason'];
 
-    //getting the date for indexing the titles of the appointments
+    //getting the current date for indexing the titles of the appointments
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
-    today = mm + '/' + dd + '/' + yyyy;
-    console.log(today);
+    today = mm + '-' + dd + '-' + yyyy;
 
     //Getting the currently signed in user (a doctor)
-    var user = firebase.auth().currentUser;
-    console.log(user);
-    if (user) {
+    console.log(currentUser);
+    if (currentUser != null && currentUser != undefined) {
         //getting their email
-        var user_email = user.email;
+        //From the form
+        var user_email = currentUser.email;
         var user_email1 = removePeriods(user_email);
-        const patient_email1 = removePeriods(appointmentForm['patient-email'].value);
+        const patient_email1 = removePeriods(appointmentForm['inputEmail4'].value);
+        const time = appointmentForm['appointment_time'].value;
+        //const dob = appointmentForm['dob'].value;
+        const Reason = appointmentForm['Reason'].value;
+        const SES = appointmentForm['SES'].value;
+        const MMSE = appointmentForm['MMSE'].value;
+        const eTIV = appointmentForm['eTIV'].value;
+        const nWBV = appointmentForm['nWBV'].value;
+        const ASF = appointmentForm['ASF'].value;
+        const notes = appointmentForm['notes'].value;
+        const DocScore = appointmentForm['doc_score'].value;
+
         const bucketName = "";
         const AlzTestScore = "";
         const MLScore = "";
-        const DocScore = "";
-        const notes = "";
+
         const confirmed = "False";
-        const MF = firebase.database().ref("Patients/" + patient_email1 + "/Info/Gender");      //database
-        console.log(MF);
-        var Age = "";     //database
-        var dob = firebase.database().ref("Patients/" + patient_email1 + "/Info/Date_Of_Birth");
-        console.log(dob);
+
+        var Age = "";
+        var dob;
+        firebase.database().ref("Patients/" + patient_email1 + "/Info").on('value', function(snapshot) {
+            const data = snapshot.val();
+            dob = data.Date_Of_Birth;
+        });
         var date_elements = dob.split("-");
         var year = date_elements[0];
         var month = date_elements[1];
         var day = date_elements[2];
 
-        dob = new Date(month + "/" + day + "/" + year);
-        var month_diff = Date.now() - dob;
-        var age_df = new Date(month_diff);
-        var years = age_df.getUTCFullYear();
-        Age = Math.abs(years - 1970);
-        console.log("The patient is: ", years)
+        dateString = month + "/" + day + "/" + year;
+        Age = getAge(dateString);
+        console.log("GetAge: ", Age);
 
-        const SES = "";     //Doctor input
-        const MMSE = "";    //Doctor input
-        const eTIV = "";    //doctor input
-        const nWBV = "";    //doctor input
-        const ASF = "";     //doctor input
+        
         const reaction_time = "";       //empty as default
         const math_score = "";          //empty as default
         const math_time = "";           //empty as default
@@ -167,6 +181,7 @@ appointmentForm.addEventListener('submit', (e) => {
 
         if (exists){
             firebase.database().ref("Doctors/" + user_email1 + "/Appointments/" + today).set({
+                Date: today,
                 Patient_Email : patient_email1,
                 Bucket_Name : bucketName,
                 AlzheimersTestScore : AlzTestScore,
@@ -174,11 +189,25 @@ appointmentForm.addEventListener('submit', (e) => {
                 DoctorSuggestedScore : DocScore,
                 Notes: notes,
                 Confirmed: confirmed, 
-                
+                Age: Age,
+                Time: time,
+                Reason: Reason,
             });
-            window.setTimeout(clearInput(IDs), 2000);
+            firebase.database().ref("Doctors/" + user_email1 + "/Appointments/" + today + "/Metrics").set({
+                SES: SES,
+                MMSE: MMSE,
+                eTIV: eTIV,
+                nWBV: nWBV,
+                ASF: ASF,
+                Reaction_Time: reaction_time,
+                Math_Score: math_score,
+                Math_Time: math_time,
+                Mood: mood
+            })
+            //window.setTimeout(clearInput(IDs), 2000);
+            alert("A new appointment has been created");
         } else {
-            console.log('Patient does not exist')
+            console.log('Patient does not exist. You must create a patient to add an appointment to their profile');
         }
     } else {
         console.log("Doctor not logged in");

@@ -3,11 +3,9 @@ var currentUser = firebase.auth().currentUser;
 //listen for auth status changes
 firebase.auth().onAuthStateChanged(user => {
     if (user) {
-        console.log("User logged in: ", user);
         currentUser = user;
         populateDropdown();
     } else {
-        console.log("User logged out");
         currentUser = user;
     }
 
@@ -16,7 +14,6 @@ firebase.auth().onAuthStateChanged(user => {
 function populateDropdown() {
     //email with periods removed of the current doctor
     if (currentUser != null && currentUser != undefined){
-        console.log("Starting to populate HTML");
         var email1 = removePeriods(currentUser.email);
         //var email1 = 'esnielsen@ctemc_()org';
         //list of the emails of the doctor's patients
@@ -34,7 +31,6 @@ function populateDropdown() {
                 
                 
             }
-            console.log("Patient Emails: ", patientEmails);
             emailsPopulated = true;
         });
         
@@ -50,7 +46,6 @@ function populateDropdown() {
                     }
                 }
             }
-            console.log("Patient Names: ", patientNames);
             namesPopulated = true;
             if (emailsPopulated) {
                 var pageSubmenu = document.getElementById("pageSubmenu");

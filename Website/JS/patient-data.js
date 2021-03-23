@@ -13,6 +13,18 @@ firebase.initializeApp(firebaseConfig); */
 /* const db = firebase.firestore();
 db.settings({ timestampsInSnapshots: true }); */
 
+function Appointment(date, patient_email, bucket_name, alz_test_score, ml_score, doc_score, notes, confirmed) {
+    this.date = date;
+    this.patient_email = patient_email;
+    this.bucket_name = bucket_name;
+    this.alz_test_score = alz_test_score;
+    this.ml_score = ml_score;
+    this.doc_score = doc_score;
+    this.notes = notes;
+    this.confirmed = confirmed;
+}
+
+
 var currentUser = firebase.auth().currentUser;
 console.log("The current user is: ", currentUser);
 
@@ -82,7 +94,16 @@ function addPeriods(input) {    // Re-adds periods back in to the emails for cor
 
 
 function populateData() {
-
+    var container = document.getElementById("content");
+    var appointments = [];
+    var doc_email1 = removePeriods(currentUser.email);
+    firebase.database().ref("Doctors/" + doc_email1 + "/Appointments").on('value', function(snapshot) {
+        const data = snapshot.val();
+        console.log(data);
+        for (var n = 0; n < data.length; n++) {
+            
+        }
+    });
 }
 
 //listen for auth status changes
