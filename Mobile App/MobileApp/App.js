@@ -3,14 +3,16 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Button, TextInput} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import MathQuestions from './Math.js';
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
   const [username, setUsername] = useState('');
   function usernameHandler(text) {
     setUsername(text);
   }
   function buttonHandler() {
     console.log(username);
+    navigation.navigate('Math');
   }
   return (
     <View style={{padding: 30}}>
@@ -27,6 +29,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Math" component = {MathQuestions} />
       </Stack.Navigator>
     </NavigationContainer>
   );
