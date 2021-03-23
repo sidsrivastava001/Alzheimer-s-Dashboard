@@ -1,4 +1,4 @@
-var firebaseConfig = {
+/* var firebaseConfig = {
     apiKey: "AIzaSyAJkaDmP2xrCFIHzufBhWqKcrRK6kvvtig",
     authDomain: "tsa-software-group-2.firebaseapp.com",
     databaseURL: "https://tsa-software-group-2-default-rtdb.firebaseio.com",
@@ -8,7 +8,7 @@ var firebaseConfig = {
     appId: "1:1009383655239:web:7706faf6dcce60f7ea2e62",
     measurementId: "G-ZXHZ4YWP9V"
 };
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig); */
 // make auth and firestore references
 /* const db = firebase.firestore();
 db.settings({ timestampsInSnapshots: true }); */
@@ -80,68 +80,16 @@ function addPeriods(input) {    // Re-adds periods back in to the emails for cor
     return email2
 }
 
-function populateDropdown() {
-    //email with periods removed of the current doctor
-    if (currentUser != null && currentUser != undefined){
-        var email1 = removePeriods(currentUser.email);
-        //var email1 = 'esnielsen@ctemc_()org';
-        //list of the emails of the doctor's patients
-        var patientEmails = [];
-        //List of names of the doctor's patients
-        var patientNames = [];
 
-        var emailsPopulated = false;
-        var namesPopulated = false;
-        //Iterate through the patients of the doctor and add their emails to the patientEmails list
-        firebase.database().ref("Doctors/" + email1 + "/Patients").on('value', function(snapshot) {
-            const data = snapshot.val();
-            for (i in data) {
-                patientEmails.push(data[i]);
-                
-                
-            }
-            emailsPopulated = true;
-        });
-        
-        //Iterate through both the patient emails list and the list of patients in the Patients folder, adding the matching emails ['First_Name'] and ['Last_Name'] properties
-        firebase.database().ref("Patients").on('value', function(snapshot) {
-            const data = snapshot.val();
-            for (email in patientEmails) {
-                for (i in data) {
-                    if (patientEmails[email].Email == data[i].Info.Email) {
-                        patientNames.push((data[i].Info.First_Name + " " + data[i].Info.Last_Name));
-                        
-                        
-                    }
-                }
-            }
-            namesPopulated = true;
-            if (emailsPopulated) {
-                var pageSubmenu = document.getElementById("pageSubmenu");
-                for (var n = 0; n < patientNames.length; n++) {
-                    var pageSubmenu = document.getElementById("pageSubmenu");
-                    var list_item = document.createElement('LI');
-                    var anchor_string = "<a href = 'patientdata.html'>" + patientNames[n] + "</a>";
-                    //var anchor = document.createElement("A");
-                    list_item.innerHTML = anchor_string;
-                    pageSubmenu.appendChild(list_item);
-                }
-            }
+function populateData() {
 
-        });
-
-    } else {
-        console.log('User object is undefined or null');
-    }
 }
-
 
 //listen for auth status changes
 firebase.auth().onAuthStateChanged(user => {
     if (user) {
         console.log("User logged in: ", user);
         currentUser = user;
-        populateDropdown();
         populateData();
     } else {
         console.log("User logged out");
