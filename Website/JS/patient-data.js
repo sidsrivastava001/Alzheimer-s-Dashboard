@@ -1,18 +1,3 @@
-/* var firebaseConfig = {
-    apiKey: "AIzaSyAJkaDmP2xrCFIHzufBhWqKcrRK6kvvtig",
-    authDomain: "tsa-software-group-2.firebaseapp.com",
-    databaseURL: "https://tsa-software-group-2-default-rtdb.firebaseio.com",
-    projectId: "tsa-software-group-2",
-    storageBucket: "tsa-software-group-2.appspot.com",
-    messagingSenderId: "1009383655239",
-    appId: "1:1009383655239:web:7706faf6dcce60f7ea2e62",
-    measurementId: "G-ZXHZ4YWP9V"
-};
-firebase.initializeApp(firebaseConfig); */
-// make auth and firestore references
-/* const db = firebase.firestore();
-db.settings({ timestampsInSnapshots: true }); */
-
 function Appointment(date, patient_email, bucket_name, alz_test_score, ml_score, doc_score, notes, confirmed, reason, time, metrics) {
     this.getalz_test_score = function() {
         return alz_test_score;
@@ -50,16 +35,9 @@ function Appointment(date, patient_email, bucket_name, alz_test_score, ml_score,
     return this;
 }
 
-
 var currentUser = firebase.auth().currentUser;
 console.log("The current user is: ", currentUser);
 
-
-
-/* function toast(text){
-    text = "<span>"+String(text)+"</span>";
-    M.toast({html: text});
-} */
 function removePeriods(input) { // Removes periods from the inputs to avoid confusing firebase and replaces them with "_()"
     //check if email contains periods
     if (input.indexOf(".") > -1) {
@@ -118,6 +96,12 @@ function addPeriods(input) {    // Re-adds periods back in to the emails for cor
     return email2
 }
 
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
 function getAge(dateString) {
     var today = new Date();
     var birthdate = new Date(dateString)
@@ -131,10 +115,11 @@ function getAge(dateString) {
 
 function populateData() {
     var container = document.getElementById('content');
+    
     var appointments = [];
     var doc_email1 = removePeriods(currentUser.email);
     var currentPatientEmail;
-    firebase.database().ref("Current_patient/Info").on('value', function(snapshot) {
+    firebase.database().ref("Current_patient").on('value', function(snapshot) {
         currentPatientEmail = snapshot.val().email1;
         firebase.database().ref("Doctors/" + doc_email1 + "/Appointments").on('value', function(snapshot) {
             const appointmentdata = snapshot.val();
@@ -157,44 +142,74 @@ function populateData() {
                 var day = components[2];
                 var dateString = month + "/" + day + "/" + year;
                 age = getAge(dateString);
-                document.getElementById('patient-name-header').innerText = 'Patient: ' + first_name + " " + last_name;
-                document.getElementById('general-data-age').innerText = 'Age: ' + age;
-                document.getElementById('general-data-gender').innerText = 'Gender: ' + gender;
-                document.getElementById('general-data-f_name').innerText = 'First Name: ' + first_name;
-                document.getElementById('general-data-l_name').innerText = 'Last Name: ' + last_name;
+                removeAllChildNodes(container);
+                var patientName = document.createElement('h2');
+                patientName.id = 'patient-name-header';
+                patientName.innerText = 'Patient: ' + first_name + " " + last_name;
+                var headerbr = document.createElement('br');
+                var headeranchor = document.createElement('a');
+                headeranchor.className = 'link-sect-box';
+                var headerdiv = document.createElement('div');
+                headerdiv.className = 'link-sect';
+                var headerh3 = document.createElement('h3');
+                headerh3.innerText = 'General Data';
+                var headerAge = document.createElement('ul');
+                headerAge.id = 'general-data-age';
+                headerAge.innerText = 'Age: ' + age;
+                var headerGender = document.createElement('ul');
+                headerGender.innerText = 'Gender: ' + gender;
+                var headerf_name = document.createElement('ul');
+                headerf_name.innerText = 'First Name: ' + first_name;
+                var headerl_name = document.createElement('ul');
+                headerl_name.innerText = 'Last Name: ' + last_name;
+                headerdiv.appendChild(headerh3);
+                headerdiv.appendChild(headerAge);
+                headerdiv.appendChild(headerGender);
+                headerdiv.appendChild(headerf_name);
+                headerdiv.appendChild(headerl_name);
+                headeranchor.appendChild(headerdiv);
+                container.appendChild(patientName);
+                container.appendChild(headerbr);
+                container.appendChild(headeranchor);
+                //document.getElementById('patient-name-header').innerText = 'Patient: ' + first_name + " " + last_name;
+                //document.getElementById('general-data-age').innerText = 'Age: ' + age;
+                //document.getElementById('general-data-gender').innerText = 'Gender: ' + gender;
+                //document.getElementById('general-data-f_name').innerText = 'First Name: ' + first_name;
+                //document.getElementById('general-data-l_name').innerText = 'Last Name: ' + last_name;
 
                 for (a in appointmentdata) {
-                    console.log('pushing appointment: ', appointmentdata[a]);
-                    appointments.push(Appointment(appointmentdata[a].Date, appointmentdata[a].Patient_Email, appointmentdata[a].Bucket_Name, appointmentdata[a].AlzheimersTestScore, appointmentdata[a].MLSuggestedScore, appointmentdata[a].DoctorSuggestedScore, 
-                        appointmentdata[a].Notes, appointmentdata[a].Confirmed, appointmentdata[a].Reason, appointmentdata[a].Time, appointmentdata[a].Metrics));
-                    //Adding horizontal line
-                    var newlinediv = document.createElement('div');
-                    newlinediv.className = 'line';
-                    container.appendChild(newlinediv);
-    
-                    //Creating data display structure
-                    var appointmentanchor = document.createElement('a');
-                    appointmentanchor.className ='link-sect-box';
-                    var appointmentdiv = document.createElement('div');
-                    appointmentdiv.className = 'link-sect';
-                    var appointmenth3 = document.createElement('h3');
-                    appointmenth3.className = 'rsrc-link';
-                    appointmenth3.innerText = "Appointment " + appointmentdata[a].Date;
-                    var reactionul = document.createElement('ul');
-                    reactionul.innerText = 'Reaction Time: ' + appointmentdata[a].Metrics.Reaction_Time + " s";
-                    var math_score_ul = document.createElement('ul');
-                    math_score_ul.innerText = "Math Score: " + appointmentdata[a].Metrics.Math_Score;
-                    var math_time_ul = document.createElement('ul');
-                    math_time_ul.innerText = "Math Time: " + appointmentdata[a].Metrics.Math_Time + " min.";
-                    var mood_ul = document.createElement('ul');
-                    mood_ul.innerText = "Mood: " + appointmentdata[a].Metrics.Mood;
-                    appointmentdiv.appendChild(appointmenth3);
-                    appointmentdiv.appendChild(reactionul);
-                    appointmentdiv.appendChild(math_score_ul);
-                    appointmentdiv.appendChild(math_time_ul);
-                    appointmentdiv.appendChild(mood_ul);
-                    appointmentanchor.appendChild(appointmentdiv);
-                    container.appendChild(appointmentanchor);
+                    if (appointmentdata[a].Patient_Email == currentPatientEmail){
+                        appointments.push(Appointment(appointmentdata[a].Date, appointmentdata[a].Patient_Email, appointmentdata[a].Bucket_Name, appointmentdata[a].AlzheimersTestScore, appointmentdata[a].MLSuggestedScore, appointmentdata[a].DoctorSuggestedScore, 
+                            appointmentdata[a].Notes, appointmentdata[a].Confirmed, appointmentdata[a].Reason, appointmentdata[a].Time, appointmentdata[a].Metrics));
+                        //Adding horizontal line
+                        var newlinediv = document.createElement('div');
+                        newlinediv.className = 'line';
+                        container.appendChild(newlinediv);
+        
+                        //Creating data display structure
+                        var appointmentanchor = document.createElement('a');
+                        appointmentanchor.className ='link-sect-box';
+                        var appointmentdiv = document.createElement('div');
+                        appointmentdiv.className = 'link-sect';
+                        var appointmenth3 = document.createElement('h3');
+                        appointmenth3.className = 'rsrc-link';
+                        appointmenth3.innerText = "Appointment " + appointmentdata[a].Date;
+                        var reactionul = document.createElement('ul');
+                        reactionul.innerText = 'Reaction Time: ' + appointmentdata[a].Metrics.Reaction_Time + " s";
+                        var math_score_ul = document.createElement('ul');
+                        math_score_ul.innerText = "Math Score: " + appointmentdata[a].Metrics.Math_Score;
+                        var math_time_ul = document.createElement('ul');
+                        math_time_ul.innerText = "Math Time: " + appointmentdata[a].Metrics.Math_Time + " min.";
+                        var mood_ul = document.createElement('ul');
+                        mood_ul.innerText = "Mood: " + appointmentdata[a].Metrics.Mood;
+                        appointmentdiv.appendChild(appointmenth3);
+                        appointmentdiv.appendChild(reactionul);
+                        appointmentdiv.appendChild(math_score_ul);
+                        appointmentdiv.appendChild(math_time_ul);
+                        appointmentdiv.appendChild(mood_ul);
+                        appointmentanchor.appendChild(appointmentdiv);
+                        container.appendChild(appointmentanchor);
+                    }
                 }
             })
         });
@@ -208,6 +223,7 @@ firebase.auth().onAuthStateChanged(user => {
         console.log("User logged in: ", user);
         currentUser = user;
         populateData();
+        
     } else {
         console.log("User logged out");
         currentUser = user;

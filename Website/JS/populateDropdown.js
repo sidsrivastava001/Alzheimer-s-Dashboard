@@ -13,7 +13,7 @@ firebase.auth().onAuthStateChanged(user => {
 
 function populateDropdown() {
     //email with periods removed of the current doctor
-    if (currentUser != null && currentUser != undefined){
+    /* if (currentUser != null && currentUser != undefined){ */
         var email1 = removePeriods(currentUser.email);
         //var email1 = 'esnielsen@ctemc_()org';
         //list of the emails of the doctor's patients
@@ -50,16 +50,18 @@ function populateDropdown() {
             if (emailsPopulated) {
                 var pageSubmenu = document.getElementById("pageSubmenu");
                 for (var n = 0; n < patientNames.length; n++) {
-                    var email2 = patientEmails[n].Email;
+                    let email2 = patientEmails[n].Email;
                     var name = patientNames[n];
                     var pageSubmenu = document.getElementById("pageSubmenu");
                     var list_item = document.createElement('LI');
                     var anchor = document.createElement("A");
-                    anchor.href = 'patientdata.html';
+                    //anchor.href = 'patientdata.html';
                     anchor.innerText = name;
+                    anchor.id = 'patient' + String(n);
                     anchor.addEventListener('click', function() {
                         setCurrentPatient(email2);
                     });
+                    //anchor.onclick = "setCurrentPatient(document.getElementById("+anchor.id+")).innerText";
                     //var anchor = document.createElement("A");
                     list_item.appendChild(anchor);
                     pageSubmenu.appendChild(list_item);
@@ -68,9 +70,9 @@ function populateDropdown() {
 
         });
 
-    } else {
+    /* } else {
         console.log('User object is undefined or null');
-    }
+    } */
 }
 
 function setCurrentPatient(patient_email) {

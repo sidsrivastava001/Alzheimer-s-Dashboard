@@ -1,22 +1,3 @@
-/* var firebaseConfig = {
-    apiKey: "AIzaSyAJkaDmP2xrCFIHzufBhWqKcrRK6kvvtig",
-    authDomain: "tsa-software-group-2.firebaseapp.com",
-    databaseURL: "https://tsa-software-group-2-default-rtdb.firebaseio.com",
-    projectId: "tsa-software-group-2",
-    storageBucket: "tsa-software-group-2.appspot.com",
-    messagingSenderId: "1009383655239",
-    appId: "1:1009383655239:web:7706faf6dcce60f7ea2e62",
-    measurementId: "G-ZXHZ4YWP9V"
-};
-firebase.initializeApp(firebaseConfig);
-// make auth and firestore references
-const db = firebase.firestore();
-db.settings({ timestampsInSnapshots: true }); */
-
-function toast(text){
-    text = "<span>"+String(text)+"</span>";
-    M.toast({html: text});
-}
 function removePeriods(input) { // Removes periods from the inputs to avoid confusing firebase and replaces them with "_()"
     //check if email contains periods
     if (input.indexOf(".") > -1) {
@@ -204,7 +185,7 @@ appointmentForm.addEventListener('submit', (e) => {
                 Math_Time: math_time,
                 Mood: mood
             })
-            //window.setTimeout(clearInput(IDs), 2000);
+            window.setTimeout(clearInput(IDs), 2000);
             alert("A new appointment has been created");
         } else {
             console.log('Patient does not exist. You must create a patient to add an appointment to their profile');
