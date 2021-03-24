@@ -92,18 +92,60 @@ function addPeriods(input) {    // Re-adds periods back in to the emails for cor
     return email2
 }
 
+function getAge(dateString) {
+    var today = new Date();
+    var birthdate = new Date(dateString)
+    var age = today.getFullYear() - birthdate.getFullYear();
+    var m = today.getMonth() - birthdate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthdate.getDate())) {
+        age--;
+    }
+    return age;
+}
 
 function populateData() {
     var container = document.getElementById("content");
     var appointments = [];
     var doc_email1 = removePeriods(currentUser.email);
-    firebase.database().ref("Doctors/" + doc_email1 + "/Appointments").on('value', function(snapshot) {
-        const data = snapshot.val();
-        console.log(data);
-        for (var n = 0; n < data.length; n++) {
-            
-        }
+    var currentPatientEmail;
+    firebase.database().ref("Current_patient/Info").on('value', function(snapshot) {
+        currentPatientEmail = snapshot.val().email1;
+        firebase.database().ref("Doctors/" + doc_email1 + "/Appointments").on('value', function(snapshot) {
+            const data = snapshot.val();
+            for (var n = 0; n < data.length; n++) {
+                
+            }
+            var date_of_birth, doc_email, email, first_name, gender, last_name, preexisting_conditions, age;
+            firebase.database().ref("Patients/" + currentPatientEmail + "/Info").on('value', function(snapshot) {
+                const data = snapshot.val();
+                console.log("Patient Info: ", data)
+                date_of_birth = snapshot.val().Date_Of_Birth;
+                doc_email = snapshot.val().Doc_Email;
+                email = snapshot.val().Email;
+                first_name = snapshot.val().First_Name;
+                gender = snapshot.val().Gender;
+                last_name = snapshot.val().Last_Name;
+                preexisting_conditions = snapshot.val().PreExistingConditions;
+    
+                var components = date_of_birth.split("-");
+                var year = components[0];
+                var month = components[1];
+                var day = components[2];
+                var dateString = month + "/" + day + "/" + year;
+                age = getAge(dateString);
+                document.getElementById('general-data-age').innerText = 'Age: ' + age;
+                document.getElementById('general-data-gender').innerText = 'Gender: ' + gender;
+                document.getElementById('general-data-f_name').innerText = 'First Name: ' + first_name;
+                document.getElementById('general-data-l_name').innerText = 'Last Name: ' + last_name;
+    
+            })
+        });
     });
+
+    
+    
+    
+
 }
 
 //listen for auth status changes

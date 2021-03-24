@@ -42,7 +42,7 @@ function setCurrentPatient(patient_email) {
     //convert argument to string
     var patient_email1 = removePeriods(String(patient_email));
     console.log("Current Patient: ", patient_email1);
-    firebase.database().ref("Current_patient").set({
+    firebase.database().ref("Current_patient/Info").set({
         email1 : patient_email1
     });
 }
