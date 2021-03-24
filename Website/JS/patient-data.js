@@ -13,15 +13,41 @@ firebase.initializeApp(firebaseConfig); */
 /* const db = firebase.firestore();
 db.settings({ timestampsInSnapshots: true }); */
 
-function Appointment(date, patient_email, bucket_name, alz_test_score, ml_score, doc_score, notes, confirmed) {
-    this.date = date;
-    this.patient_email = patient_email;
-    this.bucket_name = bucket_name;
-    this.alz_test_score = alz_test_score;
-    this.ml_score = ml_score;
-    this.doc_score = doc_score;
-    this.notes = notes;
-    this.confirmed = confirmed;
+function Appointment(date, patient_email, bucket_name, alz_test_score, ml_score, doc_score, notes, confirmed, reason, time, metrics) {
+    this.getalz_test_score = function() {
+        return alz_test_score;
+    };
+    this.ml_score = function() {
+        return ml_score;
+    }
+    this.doc_score = function() {
+        return doc_score;
+    };
+    this.notes = function() {
+        return notes;
+    };
+    this.confirmed = function() {
+        return confirmed;
+    };
+    this.reason = function() {
+        return reason;
+    };
+    this.time = function() {
+        return time;
+    };
+    this.metrics = function() {
+        return metrics;
+    };
+    this.date = function() {
+        return date;
+    }
+    this.patient_email = function() {
+        return patient_email;
+    }
+    this.bucket_name = function() {
+        return bucket_name;
+    }
+    return this;
 }
 
 
@@ -104,17 +130,15 @@ function getAge(dateString) {
 }
 
 function populateData() {
-    var container = document.getElementById("content");
+    var container = document.getElementById('content');
     var appointments = [];
     var doc_email1 = removePeriods(currentUser.email);
     var currentPatientEmail;
     firebase.database().ref("Current_patient/Info").on('value', function(snapshot) {
         currentPatientEmail = snapshot.val().email1;
         firebase.database().ref("Doctors/" + doc_email1 + "/Appointments").on('value', function(snapshot) {
-            const data = snapshot.val();
-            for (var n = 0; n < data.length; n++) {
-                
-            }
+            const appointmentdata = snapshot.val();
+
             var date_of_birth, doc_email, email, first_name, gender, last_name, preexisting_conditions, age;
             firebase.database().ref("Patients/" + currentPatientEmail + "/Info").on('value', function(snapshot) {
                 const data = snapshot.val();
@@ -133,18 +157,48 @@ function populateData() {
                 var day = components[2];
                 var dateString = month + "/" + day + "/" + year;
                 age = getAge(dateString);
+                document.getElementById('patient-name-header').innerText = 'Patient: ' + first_name + " " + last_name;
                 document.getElementById('general-data-age').innerText = 'Age: ' + age;
                 document.getElementById('general-data-gender').innerText = 'Gender: ' + gender;
                 document.getElementById('general-data-f_name').innerText = 'First Name: ' + first_name;
                 document.getElementById('general-data-l_name').innerText = 'Last Name: ' + last_name;
+
+                for (a in appointmentdata) {
+                    console.log('pushing appointment: ', appointmentdata[a]);
+                    appointments.push(Appointment(appointmentdata[a].Date, appointmentdata[a].Patient_Email, appointmentdata[a].Bucket_Name, appointmentdata[a].AlzheimersTestScore, appointmentdata[a].MLSuggestedScore, appointmentdata[a].DoctorSuggestedScore, 
+                        appointmentdata[a].Notes, appointmentdata[a].Confirmed, appointmentdata[a].Reason, appointmentdata[a].Time, appointmentdata[a].Metrics));
+                    //Adding horizontal line
+                    var newlinediv = document.createElement('div');
+                    newlinediv.className = 'line';
+                    container.appendChild(newlinediv);
     
+                    //Creating data display structure
+                    var appointmentanchor = document.createElement('a');
+                    appointmentanchor.className ='link-sect-box';
+                    var appointmentdiv = document.createElement('div');
+                    appointmentdiv.className = 'link-sect';
+                    var appointmenth3 = document.createElement('h3');
+                    appointmenth3.className = 'rsrc-link';
+                    appointmenth3.innerText = "Appointment " + appointmentdata[a].Date;
+                    var reactionul = document.createElement('ul');
+                    reactionul.innerText = 'Reaction Time: ' + appointmentdata[a].Metrics.Reaction_Time + " s";
+                    var math_score_ul = document.createElement('ul');
+                    math_score_ul.innerText = "Math Score: " + appointmentdata[a].Metrics.Math_Score;
+                    var math_time_ul = document.createElement('ul');
+                    math_time_ul.innerText = "Math Time: " + appointmentdata[a].Metrics.Math_Time + " min.";
+                    var mood_ul = document.createElement('ul');
+                    mood_ul.innerText = "Mood: " + appointmentdata[a].Metrics.Mood;
+                    appointmentdiv.appendChild(appointmenth3);
+                    appointmentdiv.appendChild(reactionul);
+                    appointmentdiv.appendChild(math_score_ul);
+                    appointmentdiv.appendChild(math_time_ul);
+                    appointmentdiv.appendChild(mood_ul);
+                    appointmentanchor.appendChild(appointmentdiv);
+                    container.appendChild(appointmentanchor);
+                }
             })
         });
-    });
-
-    
-    
-    
+    }); 
 
 }
 
