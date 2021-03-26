@@ -5,9 +5,9 @@ var num = 0;
 var questions = [[1, 1, 2], [2, 3, 6], [4, 2, 2], [10, 2, 5]];
 var operators = ['+', '*', '-', '/'];
 var correct = 0;
-export default function MathQuestions() {
+var time = new Date().getTime();
+export default function MathQuestions({ navigation }) {
     const [answer, setAnswer] = useState('0');
-    const [time, setTime] = useState(0);
     
     const [problem, setProblem] = useState("1+1=");
     
@@ -23,8 +23,9 @@ export default function MathQuestions() {
         console.log("Num: ", num);
         var prob;
         if(num == 4) {
+            console.log("Time: ", (new Date().getTime()-time)/1000);
             console.log("Correct: " + correct);
-            prob = "NULL";
+            navigation.navigate('Reaction Time');
         }
         else {
             prob = questions[num][0] + operators[num] + questions[num][1] + "=";
