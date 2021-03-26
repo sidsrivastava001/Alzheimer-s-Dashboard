@@ -121,7 +121,7 @@ function populateData() {
     var currentPatientEmail;
     firebase.database().ref("Current_patient").on('value', function(snapshot) {
         currentPatientEmail = snapshot.val().email1;
-        firebase.database().ref("Doctors/" + doc_email1 + "/Appointments").on('value', function(snapshot) {
+        firebase.database().ref("Doctors/" + doc_email1 + "/Appointments/" + currentPatientEmail).on('value', function(snapshot) {
             const appointmentdata = snapshot.val();
 
             var date_of_birth, doc_email, email, first_name, gender, last_name, preexisting_conditions, age;
