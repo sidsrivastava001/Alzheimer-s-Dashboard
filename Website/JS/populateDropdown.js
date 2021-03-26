@@ -55,7 +55,7 @@ function populateDropdown() {
                     var pageSubmenu = document.getElementById("pageSubmenu");
                     var list_item = document.createElement('LI');
                     var anchor = document.createElement("A");
-                    //anchor.href = 'patientdata.html';
+                    anchor.href = 'patientdata.html';
                     anchor.innerText = name;
                     anchor.id = 'patient' + String(n);
                     anchor.addEventListener('click', function() {
