@@ -3,6 +3,8 @@ function toast(text){
     M.toast({html: text});
 }
 function removePeriods(input) { // Removes periods from the inputs to avoid confusing firebase and replaces them with "_()"
+
+    return input.replace(/\./g, "_()");
     //check if email contains periods
     if (input.indexOf(".") > -1) {
         //split email address at the periods
@@ -30,6 +32,7 @@ function removePeriods(input) { // Removes periods from the inputs to avoid conf
     return email2
 }
 function addPeriods(input) {    // Re-adds periods back in to the emails for correct representation
+    return input.replace(/\_\(\)/g, ".");
     //check if email contains periods
     input = String(input);
     if (input.indexOf("_()") > -1) {
