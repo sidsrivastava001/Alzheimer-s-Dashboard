@@ -1,16 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Button, TextInput} from 'react-native';
+import { firebase } from './Firebase/config.js'
+
 var num = 0;
 var questions = [[1, 1, 2], [2, 3, 6], [4, 2, 2], [10, 2, 5]];
 var operators = ['+', '*', '-', '/'];
 var correct = 0;
-var time = new Date().getTime();
-export default function MathQuestions({ navigation }) {
+export default function MathQuestions({route, navigation }) {
     const [answer, setAnswer] = useState('0');
-    
+    const [initialTime, setTime] = useState(new Date().getTime());
     const [problem, setProblem] = useState("1+1=");
-    
+    const {date, Doctor, User} = route.params;
     function updateAnswer(ans) {
         setAnswer(ans);
     }
@@ -21,11 +22,17 @@ export default function MathQuestions({ navigation }) {
         }
         num+=1;
         console.log("Num: ", num);
+        console.log("Date", date);
         var prob;
         if(num == 4) {
-            console.log("Time: ", (new Date().getTime()-time)/1000);
+            var finTime = new Date().getTime();
+            console.log("Final time: ", finTime);
+            console.log("Time: ", (finTime-initialTime)/1000);
             console.log("Correct: " + correct);
-            navigation.navigate('Reaction Time');
+            console.log("FINAL DATE: ", date);
+            console.log("Doctors/"+Doctor+"/Appointments/"+User+"/"+date+"/Metrics");
+            firebase.database().ref("Doctors/"+Doctor+"/Appointments/"+User+"/"+date+"/Metrics").update({Math_Score: correct, Math_Time: (finTime-initialTime)/1000});
+            navigation.navigate('Reaction Time', {date: date, Doctor: Doctor, User: User});
         }
         else {
             prob = questions[num][0] + operators[num] + questions[num][1] + "=";

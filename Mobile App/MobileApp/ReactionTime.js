@@ -2,6 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Button, TextInput} from 'react-native';
 import Svg, { Circle, Rect } from 'react-native-svg';
+import { firebase } from './Firebase/config.js'
+
 
 function RenderStimuli() {
     return (
@@ -11,22 +13,28 @@ function RenderStimuli() {
     )
 }
 
-export default function Reaction() {
+export default function Reaction({route, navigation}) {
+
     const [randFinished, setFinished] = useState(false);
-    const [rand, setRand] = useState((Math.random()*5000)+2000);
     const [startTime, setStartTime] = useState(0);
-    
+    const {date, Doctor, User } = route.params;
     function handleButton() {
-        console.log("Time: ", (new Date().getTime()-startTime)/1000);
+        var time = (new Date().getTime()-startTime)/1000;
+        console.log("Time: ", time);
+        console.log("Doctors/"+Doctor+"/Appointments/"+User+"/"+date+"/Metrics");
+        firebase.database().ref("Doctors/"+Doctor+"/Appointments/"+User+"/"+date+"/Metrics").update({Reaction_Time: time});
+        navigation.navigate('Mood',  {date: date, Doctor: Doctor, User: User});
     }
     useEffect(() => {
+        var rand = (Math.random()*5000)+2000;
+        console.log("Random: ", rand);
         const timer = setTimeout(() => {
             console.log("Timer finished!");
             setFinished(true);
             setStartTime(new Date().getTime());
-        }, rand);
+        }, Math.round(rand));
         return () => clearTimeout(timer);
-    });
+    }, []);
     return (
         <View>
             <View style={{padding: 30}}>
