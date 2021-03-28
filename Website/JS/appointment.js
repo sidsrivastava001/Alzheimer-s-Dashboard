@@ -190,15 +190,17 @@ appointmentForm.addEventListener('submit', (e) => {
                 //Concatenating into one cohesive string
                 dateString = month + "/" + day + "/" + year;
                 //Passing the cohesive string into the function at the top of the file
-                Age = getAge(dateString);
+                //Age = getAge(dateString);
+                Age = '73';
                 console.log("GetAge: ", Age);
 
-                var gender = data.Patients[patient_email1]['Info']['Gender'];
-                if (gender == 'Male') {
-                    gender = '0';
-                } else {
+                //var gender = data.Patients[patient_email1]['Info']['Gender'];
+                var gender = '0';
+                /* if (gender == 'Male') {
                     gender = '1';
-                }
+                } else {
+                    gender = '0';
+                } */
                 var url = "http://sidsrivastava.pythonanywhere.com/?Gender=" + gender + 
                     "&Age=" + String(Age) + 
                     "&SES=" + String(SES) + 
@@ -209,6 +211,7 @@ appointmentForm.addEventListener('submit', (e) => {
                 console.log("API URL: ", url);
                 MLScore = fetch(url, {mode: 'no-cors'})
                 .then(response => {
+                    console.log(response.json());
                     console.log("Response from API: ", response);
                     MLScore = response.status;
                     MLScore = String(MLScore);
