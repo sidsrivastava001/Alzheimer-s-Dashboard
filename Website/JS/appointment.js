@@ -77,16 +77,18 @@ function getAge(dateString) {
 
 
 function populateDropdownMenu() {
-    const doctor_email1 = removePeriods(currentUser.email);
-    const parent = document.getElementById("inputEmail4");
-    firebase.database().ref("Doctors/" + doctor_email1 + "/Patients").on('value', function(snapshot) {
-        const data = snapshot.val();
-        for (patient in data) {
-            let list_option = document.createElement('option');
-            list_option.innerText = addPeriods(patient);
-            parent.appendChild(list_option);
-        }
-    });
+    if (currentUser != null){
+        const doctor_email1 = removePeriods(currentUser.email);
+        const parent = document.getElementById("inputEmail4");
+        firebase.database().ref("Doctors/" + doctor_email1 + "/Patients").on('value', function(snapshot) {
+            const data = snapshot.val();
+            for (patient in data) {
+                let list_option = document.createElement('option');
+                list_option.innerText = addPeriods(patient);
+                parent.appendChild(list_option);
+            }
+        });
+    }
 }
 
 //listen for auth status changes
@@ -98,6 +100,7 @@ firebase.auth().onAuthStateChanged(user => {
     } else {
         console.log("User logged out");
         currentUser = user;
+        populateDropdownMenu();
     }
 
 });
@@ -258,68 +261,15 @@ appointmentForm.addEventListener('submit', (e) => {
                     alert('Patient does not exist. You must create a patient to add an appointment to their profile');
                 }
             });
-        }
-        //Fetching Machine Learning model score from the flask server
-        //fetch(domainName).then(function(response) {
-        //    const Response = response.json();
-        //    MLScore = Response.MLScore;
-        //});
-        //getting their email
-        //From the form
-        
-        
-
-        //Variable describing whether the patient exists in the database under the doctor's name
-        //If not, the doctor must create that patient before adding an appointment to him or her
-        //Checking if the doctor has a patient with the email that he put in
-        //getting the snapshot of the patients folder
-        /* firebase.database().ref('Doctors/' + user_email1 + '/Patients').on('value', function(snapshot) {
-            const data = snapshot.val();
-            var i;
-            for (i in data) {
-                if (i == patient_email1) {
-                    exists = true;
-                }
-            }
-        }); */
-        /* var multiple_appointment = false;
-        var last_appointment_index = 0;
-        var appointment_indices = []; */
-        //Regex pattern to find the appointment index if there is one
-        /* const regex_pattern = /.*\(([0-9]*)\)/; */
-        //Going into the Appointments folder and into the selected patient folder to see if there will be
-        //multiple appointments on the same day under the same patient
-        /* firebase.database().ref("Doctors/" + user_email1 + "/Appointments/" + patient_email1).on('value', function(snapshot) {
-            const appointmentdata_specific = snapshot.val();
-            for (date in appointmentdata_specific) {
-                console.log(date, today);
-                if (date.indexOf(today) != -1) {
-                    multiple_appointment = true;
-                    console.log(date.match(regex_pattern));
-                    if (date.match(regex_pattern) != null) {
-                        appointment_indices.push(date.match(regex_pattern)[0]);
-                        console.log(appointment_indices);
-                        last_appointment_index = Number(date.match(regex_pattern)[0]);
-                        console.log(last_appointment_index)
-                    } else {
-                        appointment_indices.push(0);
-                        console.log(appointment_indices);
-                        last_appointment_index = 0;
-                        console.log(last_appointment_index);
-                    }
-                }
-            } */
-        //Only if a patient exists under the doctor's folder with the email that the doctor entered
-        /* var loop = true;
-        while (loop) {
-            if (exists != null) {
-                loop = false;
-            }
-        } */
-           
-        
+        }  
     } else {
         console.log("Doctor not logged in");
         alert("Please log in as a doctor to add a patient to your profile");
     }
 });
+
+const logout = document.querySelector("#logout");
+logout.addEventListener('click', (e) => {
+    e.preventDefault();
+    firebase.auth().signOut();
+})

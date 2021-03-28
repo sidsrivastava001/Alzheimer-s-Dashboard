@@ -7,13 +7,14 @@ firebase.auth().onAuthStateChanged(user => {
         populateDropdown();
     } else {
         currentUser = user;
+        populateDropdown();
     }
 
 })
 
 function populateDropdown() {
     //email with periods removed of the current doctor
-    /* if (currentUser != null && currentUser != undefined){ */
+    if (currentUser != null && currentUser != undefined){
         var email1 = removePeriods(currentUser.email);
         //var email1 = 'esnielsen@ctemc_()org';
         //list of the emails of the doctor's patients
@@ -73,6 +74,12 @@ function populateDropdown() {
     /* } else {
         console.log('User object is undefined or null');
     } */
+    }
+    if (currentUser != null && currentUser != undefined) {
+        document.getElementById("sign-in-state").innerText = "Signed In";
+    } else {
+        document.getElementById("sign-in-state").innerText = "Signed Out";
+    }
 }
 
 function setCurrentPatient(patient_email) {

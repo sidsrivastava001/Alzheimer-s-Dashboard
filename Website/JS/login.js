@@ -10,9 +10,11 @@ auth.onAuthStateChanged(user => {
     if (user) {
         console.log("User logged in: ", user);
         currentUser = user;
+        alert('You are logged in');
     } else {
         console.log("User logged out");
         currentUser = user;
+        alert("You are logged out");
     }
 
 })
@@ -36,14 +38,15 @@ loginForm.addEventListener('submit', (e) => {
     auth.signInWithEmailAndPassword(email, password)
     .then((credential) => {
         console.log(credential.user);
-        toast("You've signed in successfully");
+        alert("You've signed in successfully");
+        //toast("You've signed in successfully");
         window.setTimeout(clearInput(IDs), 2000);
     })
     .catch((error) => {
         console.log(error);
         console.log(error.code);
         console.log(error.message);
-        toast(error.message);
+        alert(error.message);
     });
     
 });
