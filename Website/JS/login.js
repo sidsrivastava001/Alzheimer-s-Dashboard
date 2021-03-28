@@ -1,7 +1,26 @@
-function toast(text){
+/* function toast(text){
     text = "<span>"+String(text)+"</span>";
     M.toast({html: text});
-}
+} */
+// Initialize Firebase
+var firebaseConfig = {
+    apiKey: "AIzaSyAJkaDmP2xrCFIHzufBhWqKcrRK6kvvtig",
+    authDomain: "tsa-software-group-2.firebaseapp.com",
+    databaseURL: "https://tsa-software-group-2-default-rtdb.firebaseio.com",
+    projectId: "tsa-software-group-2",
+    storageBucket: "tsa-software-group-2.appspot.com",
+    messagingSenderId: "1009383655239",
+    appId: "1:1009383655239:web:7706faf6dcce60f7ea2e62",
+    measurementId: "G-ZXHZ4YWP9V"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  // make auth and firestore references
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+// update firestore settings
+  db.settings({ timestampsInSnapshots: true });
 
 var currentUser = auth.currentUser;
 
@@ -10,11 +29,9 @@ auth.onAuthStateChanged(user => {
     if (user) {
         console.log("User logged in: ", user);
         currentUser = user;
-        alert('You are logged in');
     } else {
         console.log("User logged out");
         currentUser = user;
-        alert("You are logged out");
     }
 
 })

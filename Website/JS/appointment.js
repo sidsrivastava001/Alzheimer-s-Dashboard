@@ -209,82 +209,82 @@ appointmentForm.addEventListener('submit', (e) => {
                     "&nWBV=" + String(nWBV) + 
                     "&ASF=" + String(ASF);
                 console.log("API URL: ", url);
-                MLScore = fetch(url, {mode: 'no-cors'})
-                .then(response => {
-                    console.log(response.json());
-                    console.log("Response from API: ", response);
-                    MLScore = response.status;
-                    MLScore = String(MLScore);
-                    console.log("Machine Learning Score: ", MLScore);
+                MLScore = fetch(url)
+                    .then(response => response.json())
+                    .then(json => {
+                        console.log("Response JSON: ",json);
+                        MLScore = String(json.response);
+                    
+
 
                 
 
 
-                    for (a in data.Patients) {
-                        if (patient_email1 == a) {
-                            exists = true;
+                        for (a in data.Patients) {
+                            if (patient_email1 == a) {
+                                exists = true;
+                            }
                         }
-                    }
-                    if (data['Doctors'][user_email1]['Appointments'] != null && data['Doctors'][user_email1]['Appointments'] != undefined) {
-                        console.log(data['Doctors'][user_email1]['Appointments'][patient_email1]);
-                        for (date in data['Doctors'][user_email1]['Appointments'][patient_email1]) {
-                            console.log(date);
-                            if (date.indexOf(today) != -1) {
-                                multiple_appointment = true;
-                                console.log("Regex Match Result: ", date.match(regex_pattern));
-                                if (date.match(regex_pattern) != null) {
-                                    appointment_indices.push(Number(date.match(regex_pattern)[1]));
-                                    console.log("Appointment Indices: ", appointment_indices);
-                                    last_appointment_index = Number(date.match(regex_pattern)[1]);
-                                    console.log("Last Appointment Index: ", last_appointment_index)
-                                } else {
-                                    appointment_indices.push(0);
-                                    console.log("Appointment Indices: ", appointment_indices);
-                                    last_appointment_index = 0;
-                                    console.log("Last Appointment Index: ", last_appointment_index);
+                        if (data['Doctors'][user_email1]['Appointments'] != null && data['Doctors'][user_email1]['Appointments'] != undefined) {
+                            console.log(data['Doctors'][user_email1]['Appointments'][patient_email1]);
+                            for (date in data['Doctors'][user_email1]['Appointments'][patient_email1]) {
+                                console.log(date);
+                                if (date.indexOf(today) != -1) {
+                                    multiple_appointment = true;
+                                    console.log("Regex Match Result: ", date.match(regex_pattern));
+                                    if (date.match(regex_pattern) != null) {
+                                        appointment_indices.push(Number(date.match(regex_pattern)[1]));
+                                        console.log("Appointment Indices: ", appointment_indices);
+                                        last_appointment_index = Number(date.match(regex_pattern)[1]);
+                                        console.log("Last Appointment Index: ", last_appointment_index)
+                                    } else {
+                                        appointment_indices.push(0);
+                                        console.log("Appointment Indices: ", appointment_indices);
+                                        last_appointment_index = 0;
+                                        console.log("Last Appointment Index: ", last_appointment_index);
+                                    }
                                 }
                             }
                         }
-                    }
-                    if (exists){
-                        console.log(multiple_appointment);
-                        if (multiple_appointment) {
-                            modified_today = today + "(" + String(last_appointment_index+1) + ")";
-                            console.log("New today: ", modified_today);
-                        } else {
-                            modified_today = today;
-                        }
-                        //Populate a new appointment in the database in the doctor's Appointments folder
-                        firebase.database().ref("Doctors/" + user_email1 + "/Appointments/" + patient_email1 + "/" + modified_today).set({
-                            Date: today,
-                            Patient_Email : patient_email1,
-                            Bucket_Name : bucketName,
-                            AlzheimersTestScore : AlzTestScore,
-                            MLSuggestedScore : MLScore,
-                            DoctorSuggestedScore : DocScore,
-                            Notes: notes,
-                            Confirmed: confirmed, 
-                            Age: Age,
-                            Time: time,
-                            Reason: Reason,
-                        });
-                        //Create a folder in the Appointments folder in the just created appointment called "Metrics" to 
-                        //house the metrics from the appointment
-                        firebase.database().ref("Doctors/" + user_email1 + "/Appointments/" + patient_email1 + "/" + modified_today + "/Metrics").set({
-                            SES: SES,
-                            MMSE: MMSE,
-                            eTIV: eTIV,
-                            nWBV: nWBV,
-                            ASF: ASF,
-                            Reaction_Time: reaction_time,
-                            Math_Score: math_score,
-                            Math_Time: math_time,
-                            Mood: mood
-                        });
-                        //Clear inputs
-                        //window.setTimeout(clearInput(IDs), 20000);
-                        alert("A new appointment has been created");
-                        //loop = false;
+                        if (exists){
+                            console.log(multiple_appointment);
+                            if (multiple_appointment) {
+                                modified_today = today + "(" + String(last_appointment_index+1) + ")";
+                                console.log("New today: ", modified_today);
+                            } else {
+                                modified_today = today;
+                            }
+                            //Populate a new appointment in the database in the doctor's Appointments folder
+                            firebase.database().ref("Doctors/" + user_email1 + "/Appointments/" + patient_email1 + "/" + modified_today).set({
+                                Date: today,
+                                Patient_Email : patient_email1,
+                                Bucket_Name : bucketName,
+                                AlzheimersTestScore : AlzTestScore,
+                                MLSuggestedScore : MLScore,
+                                DoctorSuggestedScore : DocScore,
+                                Notes: notes,
+                                Confirmed: confirmed, 
+                                Age: Age,
+                                Time: time,
+                                Reason: Reason,
+                            });
+                            //Create a folder in the Appointments folder in the just created appointment called "Metrics" to 
+                            //house the metrics from the appointment
+                            firebase.database().ref("Doctors/" + user_email1 + "/Appointments/" + patient_email1 + "/" + modified_today + "/Metrics").set({
+                                SES: SES,
+                                MMSE: MMSE,
+                                eTIV: eTIV,
+                                nWBV: nWBV,
+                                ASF: ASF,
+                                Reaction_Time: reaction_time,
+                                Math_Score: math_score,
+                                Math_Time: math_time,
+                                Mood: mood
+                            });
+                            //Clear inputs
+                            //window.setTimeout(clearInput(IDs), 20000);
+                            alert("A new appointment has been created");
+                            //loop = false;
                     
                     } else {
                         alert('Patient does not exist. You must create a patient to add an appointment to their profile');
