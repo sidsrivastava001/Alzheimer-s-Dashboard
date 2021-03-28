@@ -75,11 +75,26 @@ function getAge(dateString) {
     return age;
 }
 
+
+function populateDropdownMenu() {
+    const doctor_email1 = removePeriods(currentUser.email);
+    const parent = document.getElementById("inputEmail4");
+    firebase.database().ref("Doctors/" + doctor_email1 + "/Patients").on('value', function(snapshot) {
+        const data = snapshot.val();
+        for (patient in data) {
+            let list_option = document.createElement('option');
+            list_option.innerText = addPeriods(patient);
+            parent.appendChild(list_option);
+        }
+    });
+}
+
 //listen for auth status changes
 firebase.auth().onAuthStateChanged(user => {
     if (user) {
         console.log("User logged in: ", user);
         currentUser = user;
+        populateDropdownMenu();
     } else {
         console.log("User logged out");
         currentUser = user;
