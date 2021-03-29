@@ -1,7 +1,4 @@
-function toast(text){
-    text = "<span>"+String(text)+"</span>";
-    M.toast({html: text});
-}
+
 function removePeriods(input) { // Removes periods from the inputs to avoid confusing firebase and replaces them with "_()"
 
     return input.replace(/\./g, "_()");

@@ -56,7 +56,13 @@
                   <a href="#" class="article">Contact Us</a>
               </li>
           </ul>
-
+          <div class = "footer-on-the-bottom">
+            <footer class = 'footer fixed-bottom' style = 'padding-bottom: 10px;'>
+                <div style = "margin-left: 60px; width: 185px;align-content: center;">
+                    <span style = "text-align: center;" id = "sign-in-state">Signed Out</span>
+                </div>
+            </footer>
+        </div>
 
         </nav>
 
@@ -132,9 +138,9 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#sidebar").mCustomScrollbar({
+            /* $("#sidebar").mCustomScrollbar({
                 theme: "minimal"
-            });
+            }); */
 
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar, #content').toggleClass('active');
@@ -163,7 +169,7 @@
           firebase.initializeApp(firebaseConfig);
     
           // make auth and firestore references
-          /* const auth = firebase.auth(); */
+          const auth = firebase.auth();
           const db = firebase.firestore();
 
         // update firestore settings
@@ -175,6 +181,8 @@
         <!-- <script src = '../JS/Materialize.js'></script> -->
         <!--<script src = 'firescripts.js'></script>-->
         <script src = "../JS/register.js"></script>
+        <script src="../JS/status-bar.js"></script>
+        <!-- <script src = "../JS/populateDropdown.js"></script> -->
 </body>
 
 </html>
