@@ -37,12 +37,40 @@ export default function Reaction({route, navigation}) {
     }, []);
     return (
         <View>
-            <View style={{padding: 30}}>
-                {randFinished && <RenderStimuli/>}
-            </View>
+            {randFinished && <RenderStimuli/>}
             <View style={{padding: 30}}>
                 <Button title="Click Button!" onPress={handleButton}/>
             </View>
         </View>
       );
 }
+
+const reactionStyles = StyleSheet.create({
+    view: {
+      justifyContent: 'center',
+      padding: 30,
+      backgroundColor: "#4103fc",
+      width: "100%",
+      height: "100%"
+    },
+    text: {
+      fontSize: 20,
+      color: "white",
+      margin: 5
+    },
+    appButtonContainer: {
+      elevation: 8,
+      backgroundColor: "#009688",
+      borderRadius: 10,
+      paddingVertical: 10,
+      paddingHorizontal: 12,
+      margin: 5
+    },
+    appButtonText: {
+      fontSize: 18,
+      color: "#fff",
+      fontWeight: "bold",
+      alignSelf: "center",
+      textTransform: "uppercase"
+    }
+  });

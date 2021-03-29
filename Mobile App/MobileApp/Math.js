@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Button, TextInput} from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Button, TextInput, TouchableOpacity} from 'react-native';
 import { firebase } from './Firebase/config.js'
 
 var num = 0;
@@ -8,7 +8,7 @@ var questions = [[1, 1, 2], [2, 3, 6], [4, 2, 2], [10, 2, 5]];
 var operators = ['+', '*', '-', '/'];
 var correct = 0;
 export default function MathQuestions({route, navigation }) {
-    const [answer, setAnswer] = useState('0');
+    const [answer, setAnswer] = useState('');
     const [initialTime, setTime] = useState(new Date().getTime());
     const [problem, setProblem] = useState("1+1=");
     const {date, Doctor, User} = route.params;
@@ -42,15 +42,42 @@ export default function MathQuestions({route, navigation }) {
         setProblem(prob);
     }
     return (
-        <View>
-            <View style={{padding: 30}}>
-                <Text>{problem}</Text>
-            </View>
-            <View style={{padding: 30}}>
-                <TextInput placeholder="Enter answer to Math Problem" onChangeText={updateAnswer} value={answer}/>
-                <Button title="Submit Answer" onPress={updateCorrect}/>
-            </View>
+        <View style={mathStyles.view}>
+                <Text style={mathStyles.text}>{problem}</Text>
+                <TextInput placeholderTextColor = "white" placeholder="Enter answer to Math Problem" onChangeText={updateAnswer} value={answer} color="#fff" padding={5}/>
+                <TouchableOpacity onPress={updateCorrect} style={mathStyles.appButtonContainer}>
+                    <Text style={mathStyles.appButtonText}>Submit Answer</Text>
+                </TouchableOpacity>
         </View>
       );
 }
 
+const mathStyles = StyleSheet.create({
+    view: {
+      justifyContent: 'center',
+      padding: 30,
+      backgroundColor: "#4103fc",
+      width: "100%",
+      height: "100%"
+    },
+    text: {
+      fontSize: 20,
+      color: "white",
+      margin: 5
+    },
+    appButtonContainer: {
+      elevation: 8,
+      backgroundColor: "#009688",
+      borderRadius: 10,
+      paddingVertical: 10,
+      paddingHorizontal: 12,
+      margin: 5
+    },
+    appButtonText: {
+      fontSize: 18,
+      color: "#fff",
+      fontWeight: "bold",
+      alignSelf: "center",
+      textTransform: "uppercase"
+    }
+  });

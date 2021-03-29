@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Button, TextInput} from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Button, TextInput, TouchableOpacity} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MathQuestions from './Math.js';
@@ -36,9 +36,12 @@ function HomeScreen({ navigation }) {
     
   }
   return (
-    <View style={{padding: 30}}>
-      <TextInput placeholder="Enter email address" onChangeText={usernameHandler} value={username}/>
-      <Button title="Start Tests" onPress={buttonHandler}/>
+    <View style={styles.view}>
+      <Text style = {styles.text}>Welcome to the Alzheimer's Tests Application! To get started, enter your email and click the button.</Text>
+      <TextInput placeholderTextColor = "white" placeholder="Enter email address" onChangeText={usernameHandler} value={username} color="#fff" padding={5}/>
+      <TouchableOpacity onPress={buttonHandler} style={styles.appButtonContainer}>
+        <Text style={styles.appButtonText}>Start Tests!</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -59,5 +62,31 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  
+  view: {
+    justifyContent: 'center',
+    padding: 30,
+    backgroundColor: "#4103fc",
+    width: "100%",
+    height: "100%"
+  },
+  text: {
+    fontSize: 20,
+    color: "white",
+    margin: 5
+  },
+  appButtonContainer: {
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    margin: 5
+  },
+  appButtonText: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase"
+  }
 });
