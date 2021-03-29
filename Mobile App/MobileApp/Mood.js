@@ -5,7 +5,7 @@ import { firebase } from './Firebase/config.js'
 
 
 
-export default function Mood({route}) {
+export default function Mood({route, navigation}) {
     const {date, Doctor, User } = route.params;
 
     function buttonPress(i) {
@@ -13,6 +13,7 @@ export default function Mood({route}) {
         firebase.database().ref("Doctors/"+Doctor+"/Appointments/"+User+"/"+date+"/Metrics").update({Mood: i});
         firebase.database().ref("Doctors/"+Doctor+"/Appointments/"+User+"/"+date).update({Confirmed: "True"});
         console.log("ID: ", i);
+        navigation.navigate('Home');
     }
     function RenderButtons() {
         var buttons = [1, 2, 3, 4, 5, 6, 7];

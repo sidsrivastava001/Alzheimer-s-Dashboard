@@ -37,8 +37,13 @@ function HomeScreen({ navigation }) {
   }
   return (
     <View style={styles.view}>
-      <Text style = {styles.text}>Welcome to the Alzheimer's Tests Application! To get started, enter your email and click the button.</Text>
-      <TextInput placeholderTextColor = "white" placeholder="Enter email address" onChangeText={usernameHandler} value={username} color="#fff" padding={5}/>
+      <Text style = {styles.text}>Welcome to the Alzheimer's Tests Application!</Text>
+      <Text style = {styles.text2}>Here's how to use this app: </Text>
+      <Text style = {styles.text2}>1. Enter your email to get started.</Text>
+      <Text style = {styles.text2}>2. Do all the math problems presented on the next screen.</Text>
+      <Text style = {styles.text2}>3. Perform the reaction time test. A green circle will appear on the screen, and you have to click the button as fast as possible.</Text>
+      <Text style = {styles.text2}>4. Answer the mood questionnaire.</Text>
+      <TextInput placeholderTextColor = "gray" placeholder="Enter email address" onChangeText={usernameHandler} value={username} backgroundColor="#fff" padding={5} margin={10} borderRadius={4}/>
       <TouchableOpacity onPress={buttonHandler} style={styles.appButtonContainer}>
         <Text style={styles.appButtonText}>Start Tests!</Text>
       </TouchableOpacity>
@@ -70,7 +75,12 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   text: {
-    fontSize: 20,
+    fontSize: 25,
+    color: "white",
+    margin: 5
+  },
+  text2: {
+    fontSize: 12,
     color: "white",
     margin: 5
   },

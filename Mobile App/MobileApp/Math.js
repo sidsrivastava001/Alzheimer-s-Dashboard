@@ -44,7 +44,7 @@ export default function MathQuestions({route, navigation }) {
     return (
         <View style={mathStyles.view}>
                 <Text style={mathStyles.text}>{problem}</Text>
-                <TextInput placeholderTextColor = "white" placeholder="Enter answer to Math Problem" onChangeText={updateAnswer} value={answer} color="#fff" padding={5}/>
+                <TextInput placeholderTextColor = "gray" placeholder="Enter answer to Math Problem" onChangeText={updateAnswer} value={answer} backgroundColor="#fff" padding={5} margin={10} borderRadius={4}/>
                 <TouchableOpacity onPress={updateCorrect} style={mathStyles.appButtonContainer}>
                     <Text style={mathStyles.appButtonText}>Submit Answer</Text>
                 </TouchableOpacity>
@@ -61,7 +61,7 @@ const mathStyles = StyleSheet.create({
       height: "100%"
     },
     text: {
-      fontSize: 20,
+      fontSize: 30,
       color: "white",
       margin: 5
     },

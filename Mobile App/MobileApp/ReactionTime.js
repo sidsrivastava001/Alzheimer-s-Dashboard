@@ -1,16 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Button, TextInput} from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Button, TextInput, TouchableOpacity} from 'react-native';
 import Svg, { Circle, Rect } from 'react-native-svg';
 import { firebase } from './Firebase/config.js'
 
 
 function RenderStimuli() {
-    return (
-    <Svg height="50%" width="50%">
-        <Circle cx="50" cy="50" r="45" fill="green" />
-    </Svg>
-    )
+     return (
+                <Svg viewBox="0 0 100 100" height="100%" width="100%">
+                    <Circle cx="50" cy="50" r="25" fill="green" />
+                </Svg>
+    ) 
+    
 }
 
 export default function Reaction({route, navigation}) {
@@ -36,27 +37,29 @@ export default function Reaction({route, navigation}) {
         return () => clearTimeout(timer);
     }, []);
     return (
-        <View>
-            {randFinished && <RenderStimuli/>}
-            <View style={{padding: 30}}>
-                <Button title="Click Button!" onPress={handleButton}/>
+        <View style={reactionStyles.view}>
+            <View styles={{alignItems: 'center', height: 50, width: "100%", backgroundColor: "#009688"}}>
+                <View aspectRatio={1}>
+                    {randFinished && <RenderStimuli/>}
+                </View>
             </View>
+            
+            <TouchableOpacity onPress={handleButton} style={reactionStyles.appButtonContainer}>
+                <Text style={reactionStyles.appButtonText}>Click Button</Text>
+            </TouchableOpacity>
         </View>
       );
 }
 
 const reactionStyles = StyleSheet.create({
     view: {
+      flex: 1,
+      flexDirection:"column",
       justifyContent: 'center',
       padding: 30,
       backgroundColor: "#4103fc",
       width: "100%",
-      height: "100%"
-    },
-    text: {
-      fontSize: 20,
-      color: "white",
-      margin: 5
+      height: "100%",
     },
     appButtonContainer: {
       elevation: 8,
