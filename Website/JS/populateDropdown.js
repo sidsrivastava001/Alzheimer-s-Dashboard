@@ -140,7 +140,7 @@ function populateDropdown() {
         document.getElementById("sign-in-state").innerText = "Signed In";
     } else {
         document.getElementById("sign-in-state").innerText = "Signed Out";
-    } */
+    }  */
 }
 
 function setCurrentPatient(patient_email) {

@@ -82,12 +82,13 @@ function getAge(dateString) {
 function populateData() {
     firebase.database().ref("Doctors/" + removePeriods(currentUser.email) + "/Doctor_Info").on("value", function(snapshot) {
         const data = snapshot.val();
-        document.getElementById('doctor-name-header').innerText = "Doctor: " + data.First_Name + " " + data.Last_Name;
+        //document.getElementById('doctor-name-header').innerText = "Doctor: " + data.First_Name + " " + data.Last_Name;
         document.getElementById("general-data-f_name").innerText = 'First Name: ' + data.First_Name;
         document.getElementById('general-data-l_name').innerText = 'Last Name: ' + data.Last_Name;
         document.getElementById('general-data-email').innerText = 'Email Address: ' + addPeriods(data.Email);
         document.getElementById('general-data-address').innerText = 'Address: ' + data.Address + ' ' + data.City + ", " + data.State + " " + data.Zip_Code;
         document.getElementById('general-data-Credentials').innerText = 'Credentials: ' + data.Credentials;
+        document.getElementById('main-doctor-header').innerText = "Hello Doctor " + data.Last_Name;
     });
 
 }

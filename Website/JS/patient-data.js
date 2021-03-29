@@ -130,7 +130,6 @@ function populateData() {
             var date_of_birth, doc_email, email, first_name, gender, last_name, preexisting_conditions, age;
             firebase.database().ref("Patients/" + currentPatientEmail + "/Info").on('value', function(snapshot) {
                 const data = snapshot.val();
-                console.log("Patient Info: ", data)
                 date_of_birth = snapshot.val().Date_Of_Birth;
                 doc_email = snapshot.val().Doc_Email;
                 email = snapshot.val().Email;

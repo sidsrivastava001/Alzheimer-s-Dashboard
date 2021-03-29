@@ -44,7 +44,7 @@
                 <li>
                     <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Patients</a>
                     <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li>
+                        <!-- <li>
                             <a href="patientdata.html">Jerry</a>
                         </li>
                         <li>
@@ -52,12 +52,12 @@
                         </li>
                         <li>
                             <a href="patientdata.html">Shayreef</a>
-                        </li>
+                        </li> -->
                     </ul>
                 </li>
                 
                 <li>
-                    <a href="#">Logout</a>
+                    <a href="#" id = "logout">Logout</a>
                 </li>
             </ul>
 
@@ -187,37 +187,8 @@
       // update firestore settings
         db.settings({ timestampsInSnapshots: true });
       </script>
-      <script>
-          function setCurrentPatient(patient_name) {
-            //convert argument to string
-            var components = patient_name.split(" ");
-            var f_name = components[0];
-            var l_name = components[1];
-            var patient_email1;
-            firebase.database().ref("Patients").on('value', function(snapshot) {
-                const data = snapshot.val();
-                for (patient in data){
-                    if (data[patient].Info.First_Name == f_name && data[patient].Info.Last_Name == l_name) {
-                        patient_email1 = data[patient].Info.Email;
-                    }
-                }
-            })
-    
-    
-    
-            console.log("Current Patient from set patient: ", patient_email1);
-            if (patient_email1 != null) {
-                firebase.database().ref("Current_patient/Info").set({
-                    email1 : patient_email1
-                });
-            }
-        }
-      </script> 
       <script src="../JS/patient-data.js"></script>
       <script src="../JS/populateDropdown.js"></script>
-      <script src="../JS/setPatient.js"></script>
-      <!-- <script src = "../JS/patient-scripts.js"></script> -->
-      <!-- <script src="../JS/Materialize.js"></script> -->
 </body>
 
 </html>
