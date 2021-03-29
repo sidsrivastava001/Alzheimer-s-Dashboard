@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import MathQuestions from './Math.js';
 import Reaction from './ReactionTime.js';
 import Mood from './Mood.js';
+import EndScreen from './EndScreen.js';
 import { firebase } from './Firebase/config.js'
 
 function HomeScreen({ navigation }) {
@@ -20,16 +21,22 @@ function HomeScreen({ navigation }) {
       const doctor = snapshot.val().Doc_Email;
       console.log("Doctor: ", doctor);
       firebase.database().ref('Doctors/'+doctor+'/Appointments/'+changedName).on('value', (snapshot) => {
-        snapshot.forEach(function(child) {
-          console.log("KEY: ", child.key);
-          if(child.val().Confirmed == "False") {
-            var thing = child.key;
-            console.log("Date: ", child.key);
-            console.log("Changed Name: ", changedName);
-            console.log("Thing: ", thing);
-            navigation.navigate('Math', {date: thing, Doctor: doctor, User: changedName});
-          }
-        });
+        if(snapshot.exists()) {
+          snapshot.forEach(function(child) {
+            console.log("KEY: ", child.key);
+            if(child.val().Confirmed == "False") {
+              var thing = child.key;
+              console.log("Date: ", child.key);
+              console.log("Changed Name: ", changedName);
+              console.log("Thing: ", thing);
+              navigation.navigate('Math', {date: thing, Doctor: doctor, User: changedName});
+            }
+          });
+        }
+        else {
+          alert("No appointments Found! Ask your doctor to create an appointment.");
+        }
+        
       });
       
     });
@@ -61,6 +68,7 @@ export default function App() {
         <Stack.Screen name="Math" component = {MathQuestions} />
         <Stack.Screen name="Reaction Time" component = {Reaction} />
         <Stack.Screen name="Mood" component = {Mood} />
+        <Stack.Screen name="End" component = {EndScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
