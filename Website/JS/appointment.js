@@ -175,7 +175,7 @@ appointmentForm.addEventListener('submit', (e) => {
             const reaction_time = "";       //empty as default
             const math_score = "";          //empty as default
             const math_time = "";           //empty as default
-            const mood = "";                //empty as default
+            const sleep = "";                //empty as default
 
             //One big database call
             firebase.database().ref().once('value').then(function(snapshot) {
@@ -190,8 +190,8 @@ appointmentForm.addEventListener('submit', (e) => {
                 //Concatenating into one cohesive string
                 dateString = month + "/" + day + "/" + year;
                 //Passing the cohesive string into the function at the top of the file
-                //Age = getAge(dateString);
-                Age = '73';
+                Age = getAge(dateString);
+                //Age = '73';
                 console.log("GetAge: ", Age);
 
                 //var gender = data.Patients[patient_email1]['Info']['Gender'];
@@ -279,7 +279,7 @@ appointmentForm.addEventListener('submit', (e) => {
                                 Reaction_Time: reaction_time,
                                 Math_Score: math_score,
                                 Math_Time: math_time,
-                                Mood: mood
+                                Sleep: sleep
                             });
                             //Clear inputs
                             //window.setTimeout(clearInput(IDs), 20000);

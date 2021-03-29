@@ -181,35 +181,129 @@ function populateData() {
 
                 for (a in appointmentdata) {
                     if (appointmentdata[a].Patient_Email == currentPatientEmail){
-                        appointments.push(Appointment(appointmentdata[a].Date, appointmentdata[a].Patient_Email, appointmentdata[a].Bucket_Name, appointmentdata[a].AlzheimersTestScore, appointmentdata[a].MLSuggestedScore, appointmentdata[a].DoctorSuggestedScore, 
-                            appointmentdata[a].Notes, appointmentdata[a].Confirmed, appointmentdata[a].Reason, appointmentdata[a].Time, appointmentdata[a].Metrics));
+                        /*appointments.push(Appointment(appointmentdata[a].Date, appointmentdata[a].Patient_Email, appointmentdata[a].Bucket_Name, appointmentdata[a].AlzheimersTestScore, appointmentdata[a].MLSuggestedScore, appointmentdata[a].DoctorSuggestedScore, 
+                            appointmentdata[a].Notes, appointmentdata[a].Confirmed, appointmentdata[a].Reason, appointmentdata[a].Time, appointmentdata[a].Metrics));*/
                         //Adding horizontal line
                         var newlinediv = document.createElement('div');
                         newlinediv.className = 'line';
                         container.appendChild(newlinediv);
         
                         //Creating data display structure
-                        var appointmentanchor = document.createElement('a');
-                        appointmentanchor.className ='link-sect-box';
-                        var appointmentdiv = document.createElement('div');
-                        appointmentdiv.className = 'link-sect';
+                        //H3 heading
                         var appointmenth3 = document.createElement('h3');
                         appointmenth3.className = 'rsrc-link';
                         appointmenth3.innerText = "Appointment " + appointmentdata[a].Date;
-                        var reactionul = document.createElement('ul');
-                        reactionul.innerText = 'Reaction Time: ' + appointmentdata[a].Metrics.Reaction_Time + " s";
-                        var math_score_ul = document.createElement('ul');
-                        math_score_ul.innerText = "Math Score: " + appointmentdata[a].Metrics.Math_Score;
-                        var math_time_ul = document.createElement('ul');
-                        math_time_ul.innerText = "Math Time: " + appointmentdata[a].Metrics.Math_Time + " min.";
-                        var mood_ul = document.createElement('ul');
-                        mood_ul.innerText = "Mood: " + appointmentdata[a].Metrics.Mood;
-                        appointmentdiv.appendChild(appointmenth3);
-                        appointmentdiv.appendChild(reactionul);
-                        appointmentdiv.appendChild(math_score_ul);
-                        appointmentdiv.appendChild(math_time_ul);
-                        appointmentdiv.appendChild(mood_ul);
-                        appointmentanchor.appendChild(appointmentdiv);
+
+                        //outer anchor
+                        var appointmentanchor = document.createElement('a');
+                        appointmentanchor.className ='link-sect-box';
+
+                        //Container Div
+                        var containerdiv = document.createElement('div');
+                        containerdiv.className = "container";
+
+                        //Row Div
+                        var rowdiv = document.createElement('div');
+                        rowdiv.className = 'row';
+
+                        //Appointment Div 1
+                        var appointmentDiv1 = document.createElement('div');
+                        appointmentDiv1.classList.add('link-sect');
+                        appointmentDiv1.classList.add('col-sm');
+
+                        //Appointment Div 2
+                        var appointmentDiv2 = document.createElement('div');
+                        appointmentDiv2.classList.add('link-sect');
+                        appointmentDiv2.classList.add('col-sm');
+
+                        //Appointment Div 3
+                        var appointmentDiv3 = document.createElement('div');
+                        appointmentDiv3.classList.add('link-sect');
+                        appointmentDiv3.classList.add('col-sm');
+
+                        //Age list element
+                        var AgeUl = document.createElement('ul');
+                        AgeUl.innerText = 'Age: ' + appointmentdata[a].Age;
+
+                        //Time list element
+                        var TimeUl = document.createElement('ul');
+                        TimeUl.innerText = "Time: " + appointmentdata[a].Time;
+
+                        //Reason list element
+                        var ReasonUl = document.createElement('ul');
+                        ReasonUl.innerText = "Reason: " + appointmentdata[a].Reason;
+
+                        //Doctor Suggested List Element
+                        var DoctorScoreUl = document.createElement('ul');
+                        DoctorScoreUl.innerText = "Doctor Score: " + appointmentdata[a].DoctorSuggestedScore;
+
+                        //ML Suggested List Element
+                        var MLScoreUl = document.createElement('ul');
+                        MLScoreUl.innerText = "Machine Learning Score: " + appointmentdata[a].MLSuggestedScore;
+
+                        //Start of metrics section
+                        //SES list element
+                        var SESUl = document.createElement('ul');
+                        SESUl.innerText = "SES: " + appointmentdata[a].Metrics.SES;
+
+                        //MMSE list element
+                        var MMSEUl = document.createElement('ul');
+                        MMSEUl.innerText = "MMSE: " + appointmentdata[a].Metrics.MMSE;
+
+                        //eTIV list element
+                        var eTIVUl = document.createElement('ul');
+                        eTIVUl.innerText = "eTIV: " + appointmentdata[a].Metrics.eTIV;
+
+                        //nWBV list element
+                        var nWBVUl = document.createElement('ul');
+                        nWBVUl.innerText = "nWBV: " + appointmentdata[a].Metrics.nWBV;
+
+                        //ASF list element
+                        var ASFUl = document.createElement('ul');
+                        ASFUl.innerText = "ASF: " + appointmentdata[a].Metrics.ASF;
+
+                        //Reaction Time list element
+                        var ReactionUl = document.createElement('ul');
+                        ReactionUl.innerText = "Reaction Time: " + appointmentdata[a].Metrics.Reaction_Time + " seconds";
+
+                        //Math Score list element
+                        var MathScoreUl = document.createElement('ul');
+                        MathScoreUl.innerText = "Math Score: " + appointmentdata[a].Metrics.Math_Score + " / 4";
+
+                        //Math Time list element
+                        var MathTimeUl = document.createElement('ul');
+                        MathTimeUl.innerText = "Math Time: " + appointmentdata[a].Metrics.Math_Time + " seconds";
+
+                        //Mood list element
+                        var SleepUl = document.createElement('ul');
+                        SleepUl.innerText = "Sleep: " + appointmentdata[a].Metrics.Sleep;
+
+                        appointmentDiv1.appendChild(AgeUl);
+                        appointmentDiv1.appendChild(TimeUl);
+                        appointmentDiv1.appendChild(ReasonUl);
+                        appointmentDiv1.appendChild(DoctorScoreUl);
+                        appointmentDiv1.appendChild(MLScoreUl);
+
+                        appointmentDiv2.appendChild(SESUl);
+                        appointmentDiv2.appendChild(MMSEUl);
+                        appointmentDiv2.appendChild(eTIVUl);
+                        appointmentDiv2.appendChild(nWBVUl);
+                        appointmentDiv2.appendChild(ASFUl);
+
+                        appointmentDiv3.appendChild(ReactionUl);
+                        appointmentDiv3.appendChild(MathScoreUl);
+                        appointmentDiv3.appendChild(MathTimeUl);
+                        appointmentDiv3.appendChild(SleepUl);
+
+                        rowdiv.appendChild(appointmentDiv1);
+                        rowdiv.appendChild(appointmentDiv2);
+                        rowdiv.appendChild(appointmentDiv3);
+
+                        containerdiv.appendChild(rowdiv);
+
+                        appointmentanchor.appendChild(containerdiv);
+
+                        container.appendChild(appointmenth3);
                         container.appendChild(appointmentanchor);
                     }
                 }

@@ -135,14 +135,18 @@ createPatientForm.addEventListener('submit', (e) => {
             Gender: gender,
             Date_Of_Birth : birthdate,
             PreExistingConditions : conditions
+        }).then(function() {
+            //Adding patient to the Patients folder within the currently logged in doctor
+            firebase.database().ref("Doctors/" + doc_email1 + "/Patients/" + email1).set({
+                Email: email1
+            }).then(function() {
+                alert("A new patient has been registered");
+                populateDropdown();
+                window.setTimeout(clearInput(IDs), 1000);
+            });
         });
-        //Adding patient to the Patients folder within the currently logged in doctor
-        firebase.database().ref("Doctors/" + doc_email1 + "/Patients/" + email1).set({
-            Email: email1
-        });
-        console.log("A new patient has been registered")
-        alert("A new patient has been registered");
-        window.setTimeout(clearInput(IDs), 1000);
+        
+        
         
     } else {
         console.log("You are not logged in as a verified doctor. Register or sign in to add a new patient");
