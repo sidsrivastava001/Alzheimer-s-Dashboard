@@ -1,10 +1,6 @@
-function toast(text){
-    text = "<span>"+String(text)+"</span>";
-    M.toast({html: text});
-}
 
 //listen for auth status changes
-auth.onAuthStateChanged(user => {
+firebase.auth().onAuthStateChanged(user => {
     if (user) {
         console.log("User logged in: ", user);
     } else {
@@ -16,5 +12,5 @@ auth.onAuthStateChanged(user => {
 const logout = document.querySelector('#logout');
 logout.addEventListener('click', (e) => {
     e.preventDefault();
-    auth.signOut();
+    firebase.auth().signOut();
 });
