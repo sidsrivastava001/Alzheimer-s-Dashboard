@@ -10,13 +10,13 @@ export default function Mood({route, navigation}) {
 
     function buttonPress(i) {
         console.log("Doctors/"+Doctor+"/Appointments/"+User+"/"+date+"/Metrics");
-        firebase.database().ref("Doctors/"+Doctor+"/Appointments/"+User+"/"+date+"/Metrics").update({Mood: i});
+        firebase.database().ref("Doctors/"+Doctor+"/Appointments/"+User+"/"+date+"/Metrics").update({Sleep: i});
         firebase.database().ref("Doctors/"+Doctor+"/Appointments/"+User+"/"+date).update({Confirmed: "True"});
         console.log("ID: ", i);
         navigation.navigate('End');
     }
     function RenderButtons() {
-        var buttons = [1, 2, 3, 4, 5, 6, 7];
+        var buttons = ["1: Feeling very alert, wide awake", "2: Able to concentrate, but not at peak", "3: Relaxed and awake, but not fully alert", "4: A little tired", "5: Feeling tired and struggling to concentrate", "6: Sleepy and want to lie down", "7: Very sleepy and cannot stay awake"];
         return buttons.map((i, index) => {
             return (
               <View style={{ marginTop: 20, width: "100%" }} key={index}>
@@ -30,7 +30,7 @@ export default function Mood({route, navigation}) {
     }
     return (
         <View style={moodstyles.view}>
-            <Text style={moodstyles.text}>How is your mood?</Text>
+            <Text style={moodstyles.text}>Which of these statements describes how you are feeling?</Text>
             <RenderButtons/>
         </View>
     );
@@ -40,7 +40,7 @@ const moodstyles = StyleSheet.create({
   view: {
     justifyContent: 'center',
     padding: 30,
-    backgroundColor: "#4103fc",
+    backgroundColor: "#0390fc",
     width: "100%",
     height: "100%"
   },
@@ -58,7 +58,7 @@ const moodstyles = StyleSheet.create({
     margin: 5
   },
   appButtonText: {
-    fontSize: 18,
+    fontSize: 10,
     color: "#fff",
     fontWeight: "bold",
     alignSelf: "center",

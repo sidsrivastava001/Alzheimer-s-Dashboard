@@ -24,7 +24,7 @@ export default function Reaction({route, navigation}) {
         console.log("Time: ", time);
         console.log("Doctors/"+Doctor+"/Appointments/"+User+"/"+date+"/Metrics");
         firebase.database().ref("Doctors/"+Doctor+"/Appointments/"+User+"/"+date+"/Metrics").update({Reaction_Time: time});
-        navigation.navigate('Mood',  {date: date, Doctor: Doctor, User: User});
+        navigation.navigate('Sleep',  {date: date, Doctor: Doctor, User: User});
     }
     useEffect(() => {
         var rand = (Math.random()*5000)+2000;
@@ -38,7 +38,7 @@ export default function Reaction({route, navigation}) {
     }, []);
     return (
         <View style={reactionStyles.view}>
-            <View styles={{alignItems: 'center', height: 50, width: "100%", backgroundColor: "#009688"}}>
+            <View styles={{alignItems: 'center', height: 50, width: "100%", backgroundColor: "#0390fc"}}>
                 <View aspectRatio={1}>
                     {randFinished && <RenderStimuli/>}
                 </View>
@@ -57,7 +57,7 @@ const reactionStyles = StyleSheet.create({
       flexDirection:"column",
       justifyContent: 'center',
       padding: 30,
-      backgroundColor: "#4103fc",
+      backgroundColor: "#0390fc",
       width: "100%",
       height: "100%",
     },

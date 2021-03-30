@@ -16,7 +16,7 @@ const endstyles = StyleSheet.create({
     view: {
       justifyContent: 'center',
       padding: 30,
-      backgroundColor: "#4103fc",
+      backgroundColor: "#0390fc",
       width: "100%",
       height: "100%"
     },

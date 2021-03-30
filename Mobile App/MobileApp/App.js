@@ -8,6 +8,9 @@ import Reaction from './ReactionTime.js';
 import Mood from './Mood.js';
 import EndScreen from './EndScreen.js';
 import { firebase } from './Firebase/config.js'
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']);
+LogBox.ignoreAllLogs();
 
 function HomeScreen({ navigation }) {
   const [username, setUsername] = useState('');
@@ -49,7 +52,7 @@ function HomeScreen({ navigation }) {
       <Text style = {styles.text2}>1. Enter your email to get started.</Text>
       <Text style = {styles.text2}>2. Do all the math problems presented on the next screen.</Text>
       <Text style = {styles.text2}>3. Perform the reaction time test. A green circle will appear on the screen, and you have to click the button as fast as possible.</Text>
-      <Text style = {styles.text2}>4. Answer the mood questionnaire.</Text>
+      <Text style = {styles.text2}>4. Answer the sleep questionnaire.</Text>
       <TextInput placeholderTextColor = "gray" placeholder="Enter email address" onChangeText={usernameHandler} value={username} backgroundColor="#fff" padding={5} margin={10} borderRadius={4}/>
       <TouchableOpacity onPress={buttonHandler} style={styles.appButtonContainer}>
         <Text style={styles.appButtonText}>Start Tests!</Text>
@@ -67,7 +70,7 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Math" component = {MathQuestions} />
         <Stack.Screen name="Reaction Time" component = {Reaction} />
-        <Stack.Screen name="Mood" component = {Mood} />
+        <Stack.Screen name="Sleep" component = {Mood} />
         <Stack.Screen name="End" component = {EndScreen} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
   view: {
     justifyContent: 'center',
     padding: 30,
-    backgroundColor: "#4103fc",
+    backgroundColor: "#0390fc",
     width: "100%",
     height: "100%"
   },
