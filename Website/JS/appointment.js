@@ -214,12 +214,9 @@ appointmentForm.addEventListener('submit', (e) => {
                     .then(json => {
                         console.log("Response JSON: ",json);
                         MLScore = String(json.response);
+                        var array = [0, 0.5, 1, 2];
+                        MLScore = array[Number(MLScore)];
                     
-
-
-                
-
-
                         for (a in data.Patients) {
                             if (patient_email1 == a) {
                                 exists = true;
